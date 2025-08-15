@@ -12,25 +12,28 @@
     @media (max-width:1000px){ main{grid-template-columns:1fr} }
     .panel{background:var(--card);border-radius:14px;padding:14px;box-shadow: 0 1px 6px rgba(0,0,0,.06)}
     .panel h2{margin:0 0 10px;font-size:1.05rem}
-    canvas{width:100%;height:auto;background:#222;border-radius:10px}
+    canvas{width:100%;height:auto;background:#222;border-radius:10px;border:1px solid #ddd}
     details{margin-top:10px}
     .tool-row{display:flex;gap:14px;flex-wrap:wrap}
     .tool{flex:1;min-width:240px}
     label{display:block;margin:6px 0;color:#222}
     input[type="range"]{width:100%}
     .button{background:var(--pri);color:#fff;border:none;border-radius:10px;padding:8px 12px;cursor:pointer}
+    .button:hover{background:#1e5a96}
     .button.secondary{background:#444}
+    .button.secondary:hover{background:#333}
     .uploader{border:2px dashed #bbb;border-radius:12px;padding:16px;text-align:center;background:#fbfbfb}
     .uploader.dragover{background:#eef7ff;border-color:#339}
     #fileInput{display:none}
     #status{margin-top:10px;font-size:0.95rem;color:#333;white-space:pre-wrap}
-    small{display:block;color:#555}
+    small{display:block;color:#555;font-size:0.85rem}
+    .debug{background:#f0f8ff;border:1px solid #b6d7ff;padding:8px;margin:8px 0;border-radius:6px;font-family:monospace;font-size:0.8rem}
   </style>
 </head>
 <body>
   <header>
     <h1>Visual Accessibility Prototype — Working Build</h1>
-    <p>Upload a photo or render. All processing runs locally in your browser.</p>
+    <p>Upload a photo to simulate various visual impairments. All processing runs locally in your browser.</p>
   </header>
 
   <main>
@@ -47,66 +50,64 @@
     <section class="panel">
       <h2>Processed</h2>
       <canvas id="proc"></canvas>
+      <div id="debugInfo" class="debug" style="display:none"></div>
     </section>
   </main>
 
   <section class="panel" style="margin:0 16px 24px">
     <details open>
-      <summary><strong>Acuity & Contrast (CSF-based pipeline)</strong></summary>
+      <summary><strong>Acuity & Contrast Sensitivity</strong></summary>
       <div class="tool-row">
         <div class="tool">
-          <h3>Acuity (logMAR)</h3>
+          <h3>Visual Acuity</h3>
           <label>logMAR: <span id="logmarVal">0.00</span> <small>Snellen: <span id="snellen">20/20</span></small></label>
-          <input id="logmar" type="range" min="0.0" max="1.2" step="0.05" value="0.00"/>
+          <input id="logmar" type="range" min="0.0" max="1.5" step="0.05" value="0.00"/>
+          <small>0.0 = 20/20, 0.3 = 20/40, 0.7 = 20/100, 1.0 = 20/200</small>
         </div>
         <div class="tool">
-          <h3>Contrast (Pelli—Robson)</h3>
-          <label>PR: <span id="prVal">1.40</span></label>
-          <input id="pr" type="range" min="0.0" max="2.0" step="0.05" value="1.40"/>
+          <h3>Contrast Sensitivity</h3>
+          <label>Peak CS: <span id="peakCSVal">100</span></label>
+          <input id="peakCS" type="range" min="1" max="200" step="5" value="100"/>
+          <small>Normal ≈ 100-200, Impaired < 50</small>
         </div>
       </div>
       <div class="tool-row">
         <div class="tool">
-          <h3>Model Settings</h3>
-          <label>Levels: <span id="levelsVal">4</span></label>
-          <input id="levels" type="range" min="3" max="6" step="1" value="4"/>
-          <label>Strength: <span id="strengthVal">1.00</span></label>
+          <h3>Filter Settings</h3>
+          <label>Pyramid Levels: <span id="levelsVal">5</span></label>
+          <input id="levels" type="range" min="3" max="7" step="1" value="5"/>
+          <label>Effect Strength: <span id="strengthVal">1.00</span></label>
           <input id="strength" type="range" min="0.0" max="1.0" step="0.05" value="1.00"/>
-          <label style="display:block;margin-top:8px;"><input type="checkbox" id="autoCSF" checked/> Auto-apply when sliders change</label>
-          <details>
-            <summary>Advanced: Viewing Geometry</summary>
-            <label>Screen PPI: <input id="ppi" type="number" value="96"/></label>
-            <label>Viewing distance (cm): <input id="viewDist" type="number" value="60"/></label>
-          </details>
-          <button id="applyCSF" class="button secondary">Apply CSF Filter</button>
-          <small id="csfInfo"></small>
+          <label style="display:block;margin-top:8px;">
+            <input type="checkbox" id="autoApply" checked/> Auto-apply when sliders change
+          </label>
+          <label style="display:block;margin-top:4px;">
+            <input type="checkbox" id="showDebug"/> Show debug info
+          </label>
+          <button id="applyCSF" class="button">Apply Vision Filter</button>
         </div>
       </div>
     </details>
 
     <details>
-      <summary><strong>Lens yellowing & Global contrast</strong></summary>
+      <summary><strong>Other Visual Effects</strong></summary>
       <div class="tool-row">
         <div class="tool">
-          <h3>Lens yellowing</h3>
+          <h3>Lens Yellowing (Age-Related)</h3>
           <label>Amount: <span id="yellVal">0</span>%</label>
           <input id="yellowing" type="range" min="0" max="100" step="5" value="0"/>
           <button id="applyYellow" class="button secondary">Apply Yellowing</button>
         </div>
         <div class="tool">
-          <h3>Global contrast</h3>
-          <label>±: <span id="contrastVal">0</span>%</label>
+          <h3>Global Contrast</h3>
+          <label>Adjustment: <span id="contrastVal">0</span>%</label>
           <input id="contrast" type="range" min="-50" max="50" step="5" value="0"/>
           <button id="applyContrast" class="button secondary">Apply Contrast</button>
         </div>
       </div>
-    </details>
-
-    <details>
-      <summary><strong>Scotoma & Demos</strong></summary>
       <div class="tool-row">
         <div class="tool">
-          <h3>Scotoma</h3>
+          <h3>Central Scotoma (Blind Spot)</h3>
           <label>Size: <span id="scSizeVal">20</span>%</label>
           <input id="scSize" type="range" min="5" max="60" step="1" value="20"/>
           <label>Feather: <span id="scFeatherVal">20</span></label>
@@ -114,14 +115,8 @@
           <button id="applyScotoma" class="button secondary">Apply Scotoma</button>
         </div>
         <div class="tool">
-          <h3>Canny edges (demo)</h3>
-          <label>T1 <input id="canny1" type="number" min="0" max="255" value="80"/></label>
-          <label>T2 <input id="canny2" type="number" min="0" max="255" value="160"/></label>
-          <button id="applyCanny" class="button secondary">Edges</button>
-        </div>
-        <div class="tool">
-          <h3>Gaussian blur (demo)</h3>
-          <label>σ: <span id="blurVal">3</span></label>
+          <h3>Simple Blur (Demo)</h3>
+          <label>Sigma: <span id="blurVal">3</span></label>
           <input id="blur" type="range" min="0" max="15" step="0.5" value="3"/>
           <button id="applyBlur" class="button secondary">Apply Blur</button>
         </div>
@@ -129,7 +124,7 @@
     </details>
 
     <div class="tool-row" style="margin-top:10px">
-      <button id="reset" class="button">Reset</button>
+      <button id="reset" class="button">Reset to Original</button>
       <button id="download" class="button">Download PNG</button>
       <span id="status" style="margin-left:8px"></span>
     </div>
@@ -138,368 +133,624 @@
   <script async src="https://docs.opencv.org/4.x/opencv.js"></script>
   <script>
   let origMat=null, procMat=null, origCanvas=null, procCanvas=null, statusEl=null;
-  let maxPixels=3000000;
-  function setStatus(msg){ statusEl && (statusEl.textContent = String(msg||'')); }
-  function onCvReady(){ setStatus('OpenCV.js loaded.'); }
-  if (window.cv && cv['onRuntimeInitialized']===undefined) { cv['onRuntimeInitialized']=onCvReady; }
-  else { document.addEventListener('opencvready', onCvReady); }
-
-  function fitCanvasToImage(canvas,w,h){
-    const px=w*h;
-    if(px>maxPixels){ const s=Math.sqrt(maxPixels/px); w=Math.round(w*s); h=Math.round(h*s); }
-    canvas.width=w; canvas.height=h;
+  let maxPixels=2000000; // Reduced for better performance
+  let debugMode = false;
+  
+  function setStatus(msg){ 
+    statusEl && (statusEl.textContent = String(msg||'')); 
+    console.log('Status:', msg);
   }
-  function loadImage(file){
-    return new Promise((resolve,reject)=>{
-      if(!file || !file.type || !file.type.startsWith('image/')) return reject(new Error('Please choose an image file.'));
-      const img=new Image();
-      img.onload=()=>resolve(img);
-      img.onerror=()=>reject(new Error('Could not read image.'));
-      img.src=URL.createObjectURL(file);
+  
+  function setDebugInfo(info){
+    const debugEl = document.getElementById('debugInfo');
+    if(debugEl && debugMode){
+      debugEl.style.display = 'block';
+      debugEl.textContent = info;
+    } else if(debugEl) {
+      debugEl.style.display = 'none';
+    }
+  }
+  
+  function onCvReady(){ 
+    setStatus('OpenCV.js loaded and ready.'); 
+  }
+  
+  // Handle OpenCV initialization
+  if (typeof cv !== 'undefined') {
+    if (cv.onRuntimeInitialized) {
+      onCvReady();
+    } else {
+      cv['onRuntimeInitialized'] = onCvReady;
+    }
+  } else {
+    // OpenCV not loaded yet, wait for it
+    window.addEventListener('load', function(){
+      if (typeof cv !== 'undefined') {
+        cv['onRuntimeInitialized'] = onCvReady;
+      }
     });
   }
+
+  function fitCanvasToImage(canvas, w, h){
+    const px = w * h;
+    if(px > maxPixels){ 
+      const s = Math.sqrt(maxPixels / px); 
+      w = Math.round(w * s); 
+      h = Math.round(h * s); 
+    }
+    canvas.width = w; 
+    canvas.height = h;
+    return {width: w, height: h};
+  }
+  
+  function loadImage(file){
+    return new Promise((resolve, reject) => {
+      if(!file || !file.type?.startsWith('image/')) {
+        return reject(new Error('Please choose an image file.'));
+      }
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = () => reject(new Error('Could not read image.'));
+      img.src = URL.createObjectURL(file);
+    });
+  }
+  
   async function handleFile(file){
     try{
       setStatus('Loading image...');
-      const img=await loadImage(file);
-      fitCanvasToImage(origCanvas, img.naturalWidth||img.width, img.naturalHeight||img.height);
-      const ctx=origCanvas.getContext('2d');
-      ctx.clearRect(0,0,origCanvas.width,origCanvas.height);
-      ctx.drawImage(img,0,0,origCanvas.width,origCanvas.height);
-      if(origMat) origMat.delete(); if(procMat) procMat.delete();
-      origMat = cv.matFromImageData(ctx.getImageData(0,0,origCanvas.width,origCanvas.height));
+      const img = await loadImage(file);
+      
+      const dims = fitCanvasToImage(origCanvas, img.naturalWidth || img.width, img.naturalHeight || img.height);
+      const ctx = origCanvas.getContext('2d');
+      ctx.clearRect(0, 0, origCanvas.width, origCanvas.height);
+      ctx.drawImage(img, 0, 0, origCanvas.width, origCanvas.height);
+      
+      // Clean up previous matrices
+      if(origMat) origMat.delete(); 
+      if(procMat) procMat.delete();
+      
+      // Create OpenCV matrices
+      const imageData = ctx.getImageData(0, 0, origCanvas.width, origCanvas.height);
+      origMat = cv.matFromImageData(imageData);
       procMat = origMat.clone();
+      
+      // Display processed image
       cv.imshow('proc', procMat);
-      setStatus(`Loaded ${file.name} (${img.width}×${img.height} → ${origCanvas.width}×${origCanvas.height})`);
-    }catch(e){ setStatus(e.message||'Failed to load image.'); }
+      
+      setStatus(`Loaded ${file.name} (${img.naturalWidth}×${img.naturalHeight} → ${dims.width}×${dims.height})`);
+      
+      // Auto-apply if enabled
+      if(document.getElementById('autoApply')?.checked){
+        applyVisionFilter();
+      }
+      
+    } catch(e){ 
+      setStatus('Error: ' + (e.message || 'Failed to load image.')); 
+      console.error('Load error:', e);
+    }
   }
-  function resetProcessed(){ if(!origMat) return; if(procMat) procMat.delete(); procMat=origMat.clone(); cv.imshow('proc', procMat); setStatus('Reset.'); }
+  
+  function resetProcessed(){ 
+    if(!origMat) {
+      setStatus('No image loaded.');
+      return;
+    }
+    if(procMat) procMat.delete(); 
+    procMat = origMat.clone(); 
+    cv.imshow('proc', procMat); 
+    setStatus('Reset to original.'); 
+    setDebugInfo('');
+  }
 
-  // ---------- CSF-based Low Vision Filter (Thompson et al. approach) ----------
-  function srgbToLinear(u){ return (u<=0.04045) ? (u/12.92) : Math.pow((u+0.055)/1.055, 2.4); }
-  function linearToSrgb(u){ return (u<=0.0031308) ? (12.92*u) : (1.055*Math.pow(u,1/2.4)-0.055); }
+  // ---------- Improved CSF-based Vision Simulation ----------
+  
+  // Convert sRGB to linear RGB
+  function srgbToLinear(u){ 
+    return (u <= 0.04045) ? (u / 12.92) : Math.pow((u + 0.055) / 1.055, 2.4); 
+  }
+  
+  function linearToSrgb(u){ 
+    return (u <= 0.0031308) ? (12.92 * u) : (1.055 * Math.pow(u, 1/2.4) - 0.055); 
+  }
 
-  // Convert RGB to linear luminance
-  function rgbaToLinearY(rgba){
+  // Convert RGBA image to luminance (Y channel in linear space)
+  function rgbaToLinearLuminance(rgba){
     const Y = new cv.Mat(rgba.rows, rgba.cols, cv.CV_32F);
-    const N = rgba.rows*rgba.cols; const src = rgba.data; const ydata = new Float32Array(Y.data.buffer);
-    for(let j=0,i=0;j<N;j++,i+=4){
-      const r = srgbToLinear(src[i]/255), g = srgbToLinear(src[i+1]/255), b = srgbToLinear(src[i+2]/255);
-      ydata[j] = 0.2126*r + 0.7152*g + 0.0722*b;
+    const N = rgba.rows * rgba.cols;
+    const src = rgba.data;
+    const ydata = new Float32Array(Y.data.buffer);
+    
+    for(let j = 0, i = 0; j < N; j++, i += 4){
+      const r = srgbToLinear(src[i] / 255);
+      const g = srgbToLinear(src[i+1] / 255);
+      const b = srgbToLinear(src[i+2] / 255);
+      // ITU-R BT.709 luminance weights
+      ydata[j] = 0.2126 * r + 0.7152 * g + 0.0722 * b;
     }
     return Y;
   }
 
   // Replace luminance while preserving chromaticity
-  function replaceYKeepChroma(Ylin, rgbaIn){
-    const out = new cv.Mat(rgbaIn.rows, rgbaIn.cols, rgbaIn.type());
-    const N = rgbaIn.rows*rgbaIn.cols; const src = rgbaIn.data; const dst = out.data; const ynew = new Float32Array(Ylin.data.buffer);
-    for(let j=0,i=0;j<N;j++,i+=4){
-      let r = srgbToLinear(src[i]/255), g = srgbToLinear(src[i+1]/255), b = srgbToLinear(src[i+2]/255);
-      const yold = 0.2126*r + 0.7152*g + 0.0722*b;
-      const s = yold>1e-6 ? (ynew[j]/yold) : 0;
-      r = Math.min(1, Math.max(0, r*s));
-      g = Math.min(1, Math.max(0, g*s));
-      b = Math.min(1, Math.max(0, b*s));
-      dst[i]   = Math.round(255*linearToSrgb(r));
-      dst[i+1] = Math.round(255*linearToSrgb(g));
-      dst[i+2] = Math.round(255*linearToSrgb(b));
-      dst[i+3] = src[i+3];
+  function replaceYKeepChroma(newY, originalRGBA){
+    const out = new cv.Mat(originalRGBA.rows, originalRGBA.cols, originalRGBA.type());
+    const N = originalRGBA.rows * originalRGBA.cols;
+    const src = originalRGBA.data;
+    const dst = out.data;
+    const ynew = new Float32Array(newY.data.buffer);
+    
+    for(let j = 0, i = 0; j < N; j++, i += 4){
+      let r = srgbToLinear(src[i] / 255);
+      let g = srgbToLinear(src[i+1] / 255);
+      let b = srgbToLinear(src[i+2] / 255);
+      
+      const yold = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      const scale = yold > 1e-6 ? (ynew[j] / yold) : 0;
+      
+      r = Math.min(1, Math.max(0, r * scale));
+      g = Math.min(1, Math.max(0, g * scale));
+      b = Math.min(1, Math.max(0, b * scale));
+      
+      dst[i]   = Math.round(255 * linearToSrgb(r));
+      dst[i+1] = Math.round(255 * linearToSrgb(g));
+      dst[i+2] = Math.round(255 * linearToSrgb(b));
+      dst[i+3] = src[i+3]; // Alpha unchanged
     }
     return out;
   }
 
-  // Bandpass decomposition using Laplacian pyramid
-  function pyrBuildLaplacian32(gray32, levels){
-    const gP=[], lP=[];
-    let cur=gray32.clone();
-    for(let i=0;i<levels;i++){
-      const down=new cv.Mat(); cv.pyrDown(cur,down);
-      const up=new cv.Mat(); cv.pyrUp(down,up,cur.size());
-      const lap=new cv.Mat(); cv.subtract(cur,up,lap);
-      gP.push(cur); lP.push(lap);
-      cur=down; up.delete();
-    }
-    gP.push(cur);
-    return {gP,lP};
-  }
-
-  function pyrReconstruct32(lP, residual){
-    let cur=residual.clone();
-    for(let i=lP.length-1;i>=0;i--){
-      const up=new cv.Mat(); cv.pyrUp(cur,up,lP[i].size());
-      const sum=new cv.Mat(); cv.add(up,lP[i],sum);
-      cur.delete(); cur=sum; up.delete();
-    }
-    return cur;
-  }
-
-  // Viewing geometry calculation
-  function pxPerDeg(){
-    const ppiEl=document.getElementById('ppi'), distEl=document.getElementById('viewDist');
-    const ppi = ppiEl ? Number(ppiEl.value) : 96;
-    const distCm = distEl ? Number(distEl.value) : 60;
-    const pitchCm = 2.54/Math.max(1e-6, ppi);
-    const degPerPx = (180/Math.PI) * (pitchCm/Math.max(1e-3, distCm));
-    return 1/degPerPx; // pixels per degree
-  }
-
-  // Calculate center frequency for each pyramid level
-  function bandCenter_cpd(i, levels, ppd){ 
-    const cycPerPx = 0.5 / Math.pow(2, i);
-    return cycPerPx * ppd; 
-  }
-
-  // CSF parameters from Thompson et al.
-  function normalCSF(freq_cpd) {
-    // Normal CSF approximation (Campbell & Robson style)
-    const peak_freq = 3.0; // cycles per degree
-    const peak_sensitivity = 200; // arbitrary units
-    const falloff_low = 1.0;
-    const falloff_high = 0.8;
+  // Build Laplacian pyramid for frequency decomposition
+  function buildLaplacianPyramid(grayMat, levels){
+    const gaussianPyramid = [];
+    const laplacianPyramid = [];
     
-    const ratio = freq_cpd / peak_freq;
+    let current = grayMat.clone();
+    
+    for(let i = 0; i < levels; i++){
+      gaussianPyramid.push(current.clone());
+      
+      // Downsample
+      const down = new cv.Mat();
+      cv.pyrDown(current, down);
+      
+      // Upsample back to current size
+      const up = new cv.Mat();
+      cv.pyrUp(down, up, current.size());
+      
+      // Laplacian = original - upsampled
+      const laplacian = new cv.Mat();
+      cv.subtract(current, up, laplacian);
+      laplacianPyramid.push(laplacian);
+      
+      current.delete();
+      current = down;
+      up.delete();
+    }
+    
+    // Add the residual (smallest Gaussian level)
+    gaussianPyramid.push(current);
+    
+    return { gaussian: gaussianPyramid, laplacian: laplacianPyramid };
+  }
+
+  function reconstructFromLaplacianPyramid(laplacianPyramid, residual){
+    let current = residual.clone();
+    
+    for(let i = laplacianPyramid.length - 1; i >= 0; i--){
+      const up = new cv.Mat();
+      cv.pyrUp(current, up, laplacianPyramid[i].size());
+      
+      const reconstructed = new cv.Mat();
+      cv.add(up, laplacianPyramid[i], reconstructed);
+      
+      current.delete();
+      current = reconstructed;
+      up.delete();
+    }
+    
+    return current;
+  }
+
+  // Improved CSF model based on literature
+  function contrastSensitivityFunction(spatialFreq_cpd, peakCS = 100, cutoffFreq = 30){
+    // Simplified CSF based on Campbell & Robson (1968) and later work
+    // Peak sensitivity around 3-4 cycles per degree
+    const peakFreq = 3.5; // cycles per degree
+    const lowFreqFalloff = 1.2;
+    const highFreqFalloff = 0.7;
+    
+    if(spatialFreq_cpd <= 0) return 0.1;
+    
+    const ratio = spatialFreq_cpd / peakFreq;
     let sensitivity;
     
-    if (ratio < 1) {
-      sensitivity = peak_sensitivity * Math.pow(ratio, falloff_low);
+    if(ratio < 1){
+      // Low frequency roll-off
+      sensitivity = peakCS * Math.pow(ratio, lowFreqFalloff);
     } else {
-      sensitivity = peak_sensitivity * Math.pow(ratio, -falloff_high);
+      // High frequency roll-off  
+      sensitivity = peakCS * Math.pow(ratio, -highFreqFalloff);
+    }
+    
+    // Apply cutoff for high frequencies
+    if(spatialFreq_cpd > cutoffFreq){
+      const rolloff = Math.exp(-(spatialFreq_cpd - cutoffFreq) / 5);
+      sensitivity *= rolloff;
     }
     
     return Math.max(0.1, sensitivity);
   }
 
-  // Calculate impaired CSF based on acuity and contrast sensitivity
-  function impairedCSF(freq_cpd, logMAR, pellRobson) {
-    const normalSens = normalCSF(freq_cpd);
-    
-    // Acuity affects high frequencies more
-    const acuityFactor = Math.pow(10, -logMAR); // converts logMAR to Snellen decimal
-    const highFreqCutoff = acuityFactor * 30; // approximate cutoff frequency
-    
-    // Contrast sensitivity affects overall gain
-    const contrastFactor = Math.pow(10, pellRobson - 2.0); // normalize to normal vision
-    
-    // Combine effects
-    let impairedSens = normalSens * contrastFactor;
-    
-    // Apply frequency-dependent acuity loss
-    if (freq_cpd > highFreqCutoff) {
-      const rolloff = Math.exp(-(freq_cpd - highFreqCutoff) / (highFreqCutoff * 0.5));
-      impairedSens *= rolloff;
+  function applyVisionFilter(){
+    if(!procMat || typeof cv === 'undefined'){ 
+      setStatus('Load an image first or wait for OpenCV to load.'); 
+      return; 
     }
     
-    return Math.max(0.01, impairedSens);
-  }
-
-  // Calculate band gain (impaired CSF / normal CSF)
-  function bandGain(f_cpd, logMAR, pellRobson){
-    const normal = normalCSF(f_cpd);
-    const impaired = impairedCSF(f_cpd, logMAR, pellRobson);
-    return impaired / normal;
-  }
-
-  function applyCSF(logMAR, PR, levels, strength){
-    if(!procMat){ setStatus('Load an image first.'); return; }
-    setStatus('Applying CSF filter...');
+    setStatus('Applying vision filter...');
     
     try {
+      // Get parameters
+      const logMAR = Number(document.getElementById('logmar').value);
+      const peakCS = Number(document.getElementById('peakCS').value);
+      const levels = Number(document.getElementById('levels').value);
+      const strength = Number(document.getElementById('strength').value);
+      
+      // Convert logMAR to acuity factor
+      const acuityFactor = Math.pow(10, -logMAR); // 1.0 = normal, 0.1 = very poor
+      const highFreqCutoff = acuityFactor * 30; // Approximate cutoff in cycles/degree
+      
       // Convert to linear luminance
-      const Ylin = rgbaToLinearY(procMat);
-      const Y32 = new cv.Mat(); Ylin.convertTo(Y32, cv.CV_32F, 1.0);
+      const luminance = rgbaToLinearLuminance(procMat);
+      const luminance32 = new cv.Mat();
+      luminance.convertTo(luminance32, cv.CV_32F);
       
-      // Build Laplacian pyramid for frequency decomposition
-      const pyr = pyrBuildLaplacian32(Y32, levels);
+      // Build frequency pyramid
+      const pyramid = buildLaplacianPyramid(luminance32, levels);
       
-      // Get viewing parameters
-      const ppd = pxPerDeg();
+      let debugInfo = `Levels: ${levels}, logMAR: ${logMAR.toFixed(2)}, Peak CS: ${peakCS}\n`;
       
-      let gainsInfo = [];
-      
-      // Apply CSF-based gains to each frequency band
-      for(let i = 0; i < pyr.lP.length; i++){
-        const f = bandCenter_cpd(i, pyr.lP.length, ppd);
-        const gain = (1-strength) + strength * bandGain(f, logMAR, PR);
-        gainsInfo.push(`${f.toFixed(2)}c/deg→${gain.toFixed(2)}`);
+      // Apply CSF-based filtering to each frequency band
+      for(let i = 0; i < pyramid.laplacian.length; i++){
+        // Estimate spatial frequency for this pyramid level
+        // Each level represents roughly a doubling of spatial frequency
+        const baseFreq = 0.5; // cycles per pixel at full resolution
+        const levelFreq = baseFreq * Math.pow(2, i);
+        // Convert to cycles per degree (rough approximation)
+        const freqCpd = levelFreq * 60; // Assuming ~60 pixels per degree
+        
+        // Calculate contrast sensitivity for this frequency
+        const normalCS = contrastSensitivityFunction(freqCpd, 100, 60);
+        const impairedCS = contrastSensitivityFunction(freqCpd, peakCS, highFreqCutoff);
+        
+        // Gain factor (how much to attenuate this frequency band)
+        const gain = impairedCS / normalCS;
+        const finalGain = (1 - strength) + strength * gain;
+        
+        debugInfo += `Level ${i}: ${freqCpd.toFixed(1)} cpd, gain: ${finalGain.toFixed(3)}\n`;
         
         // Apply gain to this frequency band
-        cv.multiply(pyr.lP[i], new cv.Scalar(gain), pyr.lP[i]);
+        cv.multiply(pyramid.laplacian[i], new cv.Scalar(finalGain), pyramid.laplacian[i]);
       }
       
-      // Reconstruct image from modified pyramid
-      const Yrec = pyrReconstruct32(pyr.lP, pyr.gP[pyr.gP.length-1]);
+      // Reconstruct the image
+      const reconstructed = reconstructFromLaplacianPyramid(pyramid.laplacian, pyramid.gaussian[pyramid.gaussian.length - 1]);
       
-      // Clamp values to valid range
-      cv.min(Yrec, new cv.Scalar(1), Yrec); 
-      cv.max(Yrec, new cv.Scalar(0), Yrec);
+      // Clamp to valid range [0, 1]
+      cv.min(reconstructed, new cv.Scalar(1), reconstructed);
+      cv.max(reconstructed, new cv.Scalar(0), reconstructed);
       
-      // Convert back to RGBA, preserving chromaticity
-      const outRGBA = replaceYKeepChroma(Yrec, procMat);
+      // Convert back to RGBA, preserving color
+      const resultRGBA = replaceYKeepChroma(reconstructed, procMat);
       
-      // Update processed image
-      procMat.delete(); 
-      procMat = outRGBA; 
+      // Update display
+      procMat.delete();
+      procMat = resultRGBA;
       cv.imshow('proc', procMat);
       
-      // Clean up temporary matrices
-      [Ylin, Y32, Yrec].forEach(m => m.delete());
-      pyr.gP.forEach(m => m.delete());
-      pyr.lP.forEach(m => m.delete());
+      // Clean up
+      luminance.delete();
+      luminance32.delete();
+      reconstructed.delete();
+      pyramid.gaussian.forEach(m => m.delete());
+      pyramid.laplacian.forEach(m => m.delete());
       
-      // Update status and info
-      const infoEl = document.getElementById('csfInfo');
-      if(infoEl){
-        infoEl.textContent = `Bands: ${gainsInfo.join(' • ')} | ppd≈${ppd.toFixed(1)} | logMAR=${logMAR.toFixed(2)} PR=${PR.toFixed(2)}`;
-      }
-      
-      setStatus(`CSF filter applied (${levels} levels, strength=${strength.toFixed(2)})`);
+      setStatus(`Vision filter applied (${levels} levels, strength=${strength.toFixed(2)})`);
+      setDebugInfo(debugInfo);
       
     } catch(e) {
-      setStatus('Error applying CSF filter: ' + e.message);
-      console.error('CSF filter error:', e);
+      setStatus('Error applying filter: ' + e.message);
+      console.error('Vision filter error:', e);
     }
   }
 
-  // ---------- Other effects ----------
-  function applyBlur(px){
-    if(!procMat) return;
-    const out=new cv.Mat();
-    const k=Math.max(1,(Math.floor(px)|1));
-    cv.GaussianBlur(procMat,out,new cv.Size(k,k),0,0,cv.BORDER_DEFAULT);
-    procMat.delete(); procMat=out; cv.imshow('proc', procMat);
+  // ---------- Other Effects ----------
+  
+  function applyBlur(sigma){
+    if(!procMat) { setStatus('Load an image first.'); return; }
+    
+    const ksize = Math.max(1, Math.floor(sigma * 6) | 1); // Ensure odd kernel size
+    const blurred = new cv.Mat();
+    cv.GaussianBlur(procMat, blurred, new cv.Size(ksize, ksize), sigma, sigma, cv.BORDER_DEFAULT);
+    
+    procMat.delete();
+    procMat = blurred;
+    cv.imshow('proc', procMat);
+    setStatus(`Applied Gaussian blur (σ=${sigma})`);
   }
-  function applyCanny(t1,t2){
-    if(!procMat) return;
-    const gray=new cv.Mat(); cv.cvtColor(procMat,gray,cv.COLOR_RGBA2GRAY,0);
-    const edges=new cv.Mat(); cv.Canny(gray,edges,Number(t1),Number(t2),3,false);
-    const disp=new cv.Mat(); cv.cvtColor(edges,disp,cv.COLOR_GRAY2RGBA,0);
-    procMat.delete(); procMat=disp; cv.imshow('proc', procMat);
-    gray.delete(); edges.delete();
-  }
+  
   function applyYellowing(percent){
-    if(!procMat) return;
-    const f = Math.max(0, Math.min(1, percent/100));
-    const out = new cv.Mat(procMat.rows, procMat.cols, procMat.type());
-    const src = procMat.data, dst = out.data;
-    for(let i=0;i<src.length;i+=4){
-      const r=src[i], g=src[i+1], b=src[i+2];
-      // simple yellowing: reduce blue, mildly lift red/green
-      const b2 = Math.round(b*(1-0.7*f));
-      const r2 = Math.min(255, Math.round(r*(1+0.15*f)));
-      const g2 = Math.min(255, Math.round(g*(1+0.10*f)));
-      dst[i]=r2; dst[i+1]=g2; dst[i+2]=b2; dst[i+3]=src[i+3];
+    if(!procMat) { setStatus('Load an image first.'); return; }
+    
+    const factor = Math.max(0, Math.min(1, percent / 100));
+    const result = new cv.Mat(procMat.rows, procMat.cols, procMat.type());
+    const src = procMat.data;
+    const dst = result.data;
+    
+    for(let i = 0; i < src.length; i += 4){
+      const r = src[i];
+      const g = src[i + 1]; 
+      const b = src[i + 2];
+      
+      // Yellowing effect: reduce blue, slightly enhance red/green
+      const newB = Math.round(b * (1 - 0.8 * factor));
+      const newR = Math.min(255, Math.round(r * (1 + 0.1 * factor)));
+      const newG = Math.min(255, Math.round(g * (1 + 0.05 * factor)));
+      
+      dst[i] = newR;
+      dst[i + 1] = newG;
+      dst[i + 2] = newB;
+      dst[i + 3] = src[i + 3]; // Alpha unchanged
     }
-    procMat.delete(); procMat=out; cv.imshow('proc', procMat);
+    
+    procMat.delete();
+    procMat = result;
+    cv.imshow('proc', procMat);
+    setStatus(`Applied lens yellowing (${percent}%)`);
   }
+  
   function applyGlobalContrast(percent){
-    if(!procMat) return;
-    // percent ∈ [-50,50]; map to alpha and beta
+    if(!procMat) { setStatus('Load an image first.'); return; }
+    
     const p = Math.max(-50, Math.min(50, percent));
-    const alpha = 1 + (p/100)*2; // 0→1, 50→2
-    const beta = 0; // no bias
-    const out=new cv.Mat(); procMat.convertTo(out, -1, alpha, beta);
-    procMat.delete(); procMat=out; cv.imshow('proc', procMat);
+    // Convert percentage to contrast multiplier
+    const alpha = 1 + (p / 50); // -50% → 0.5, 0% → 1.0, 50% → 1.5
+    const beta = 0; // No brightness offset
+    
+    const result = new cv.Mat();
+    procMat.convertTo(result, -1, alpha, beta);
+    
+    procMat.delete();
+    procMat = result;
+    cv.imshow('proc', procMat);
+    setStatus(`Applied contrast adjustment (${percent}%)`);
   }
+  
   function applyScotoma(sizePct, feather){
-    if(!procMat) return;
-    const w=procMat.cols, h=procMat.rows;
-    const cx=Math.round(w/2), cy=Math.round(h/2);
-    const r = Math.round(Math.min(w,h)*sizePct/200); // radius
-    const mask=new cv.Mat.zeros(h,w,cv.CV_32F);
-    // radial feathered mask 0..1 (1 inside scotoma)
-    for(let y=0; y<h; y++){
-      for(let x=0; x<w; x++){
-        const dx=x-cx, dy=y-cy; const d=Math.sqrt(dx*dx+dy*dy);
-        let m = d<=r ? 1 : 0;
-        if (feather>0){
-          const f = feather;
-          if(d>r && d<r+f) m = 1 - (d-r)/f;
+    if(!procMat) { setStatus('Load an image first.'); return; }
+    
+    const w = procMat.cols;
+    const h = procMat.rows;
+    const cx = Math.round(w / 2);
+    const cy = Math.round(h / 2);
+    const radius = Math.round(Math.min(w, h) * sizePct / 200);
+    
+    // Create mask
+    const mask = new cv.Mat.zeros(h, w, cv.CV_32F);
+    
+    for(let y = 0; y < h; y++){
+      for(let x = 0; x < w; x++){
+        const dx = x - cx;
+        const dy = y - cy;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        let maskValue = 0; // Default: no scotoma
+        
+        if(distance <= radius){
+          maskValue = 1; // Full scotoma
+        } else if(feather > 0 && distance < radius + feather){
+          // Feathered edge
+          maskValue = 1 - (distance - radius) / feather;
         }
-        mask.floatPtr(y,x)[0]=m;
+        
+        mask.floatPtr(y, x)[0] = Math.max(0, Math.min(1, maskValue));
       }
     }
-    const inv=new cv.Mat(); cv.subtract(cv.Mat.ones(h,w,cv.CV_32F), mask, inv);
-    const src32=new cv.Mat(); procMat.convertTo(src32, cv.CV_32FC4, 1/255);
-    const fg=new cv.Mat(), bg=new cv.Mat();
-    cv.multiply(src32,new cv.Mat(src32.rows,src32.cols,cv.CV_32FC4,new cv.Scalar(0,0,0,1)),bg);
-    // apply mask to combine
-    const ch=new cv.MatVector(); cv.split(src32,ch);
-    const m4=new cv.MatVector(); m4.push_back(mask); m4.push_back(mask); m4.push_back(mask); m4.push_back(mask);
-    const masked=new cv.MatVector();
-    for(let i=0;i<4;i++){ const tmp=new cv.Mat(); cv.multiply(ch.get(i), m4.get(i), tmp); masked.push_back(tmp); }
-    const sc=new cv.Mat(); cv.merge(masked, sc);
-    const keep=new cv.MatVector();
-    for(let i=0;i<4;i++){ const tmp=new cv.Mat(); cv.multiply(ch.get(i), inv, tmp); keep.push_back(tmp); }
-    const kept=new cv.Mat(); cv.merge(keep, kept);
-    const sum=new cv.Mat(); cv.add(kept, sc, sum);
-    const out=new cv.Mat(); sum.convertTo(out, cv.CV_8UC4, 255);
-    procMat.delete(); procMat=out; cv.imshow('proc', procMat);
-    // cleanup
-    [mask,inv,src32,fg,bg,sc,kept,sum].forEach(m=>m.delete());
-    for(let i=0;i<4;i++){ ch.get(i).delete(); masked.get(i).delete(); keep.get(i).delete(); }
-    ch.delete(); masked.delete(); keep.delete(); m4.get(0).delete(); m4.get(1).delete(); m4.get(2).delete(); m4.get(3).delete(); m4.delete();
+    
+    // Apply scotoma (darken masked areas)
+    const result = procMat.clone();
+    const channels = new cv.MatVector();
+    cv.split(result, channels);
+    
+    for(let c = 0; c < 3; c++){ // RGB channels only
+      const channel = channels.get(c);
+      const channel32 = new cv.Mat();
+      channel.convertTo(channel32, cv.CV_32F);
+      
+      // Apply inverted mask (1 - mask) to darken scotoma areas
+      const invMask = new cv.Mat();
+      cv.subtract(cv.Mat.ones(h, w, cv.CV_32F), mask, invMask);
+      
+      const masked = new cv.Mat();
+      cv.multiply(channel32, invMask, masked);
+      
+      masked.convertTo(channel, cv.CV_8U);
+      
+      channel32.delete();
+      invMask.delete();
+      masked.delete();
+    }
+    
+    cv.merge(channels, result);
+    
+    // Clean up
+    mask.delete();
+    for(let i = 0; i < channels.size(); i++){
+      channels.get(i).delete();
+    }
+    channels.delete();
+    
+    procMat.delete();
+    procMat = result;
+    cv.imshow('proc', procMat);
+    setStatus(`Applied central scotoma (${sizePct}% size, ${feather} feather)`);
   }
 
-  // ---------- Wiring ----------
-  window.addEventListener('DOMContentLoaded',()=>{
-    origCanvas=document.getElementById('orig'); procCanvas=document.getElementById('proc'); statusEl=document.getElementById('status');
-    const fileInput=document.getElementById('fileInput'); const dropArea=document.getElementById('dropArea');
-    fileInput.addEventListener('change', e=>{ const f=e.target.files[0]; if(f) handleFile(f); });
-    ['dragenter','dragover','dragleave','drop'].forEach(evt=>dropArea.addEventListener(evt, e=>{ e.preventDefault(); e.stopPropagation(); }, false));
-    ['dragenter','dragover'].forEach(evt=>dropArea.addEventListener(evt, ()=>dropArea.classList.add('dragover'), false));
-    ['dragleave','drop'].forEach(evt=>dropArea.addEventListener(evt, ()=>dropArea.classList.remove('dragover'), false));
-    dropArea.addEventListener('drop', e=>{ const f=e.dataTransfer.files && e.dataTransfer.files[0]; if(f) handleFile(f); });
+  // ---------- UI Event Handlers ----------
+  
+  window.addEventListener('DOMContentLoaded', () => {
+    // Get canvas elements
+    origCanvas = document.getElementById('orig');
+    procCanvas = document.getElementById('proc');
+    statusEl = document.getElementById('status');
+    
+    // File input handling
+    const fileInput = document.getElementById('fileInput');
+    const dropArea = document.getElementById('dropArea');
+    
+    fileInput.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if(file) handleFile(file);
+    });
+    
+    // Drag and drop
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(evt => {
+      dropArea.addEventListener(evt, e => {
+        e.preventDefault();
+        e.stopPropagation();
+      }, false);
+    });
+    
+    ['dragenter', 'dragover'].forEach(evt => {
+      dropArea.addEventListener(evt, () => dropArea.classList.add('dragover'), false);
+    });
+    
+    ['dragleave', 'drop'].forEach(evt => {
+      dropArea.addEventListener(evt, () => dropArea.classList.remove('dragover'), false);
+    });
+    
+    dropArea.addEventListener('drop', e => {
+      const file = e.dataTransfer.files?.[0];
+      if(file) handleFile(file);
+    });
 
-    const logmar=document.getElementById('logmar'), logmarVal=document.getElementById('logmarVal'), snellen=document.getElementById('snellen');
-    const pr=document.getElementById('pr'), prVal=document.getElementById('prVal');
-    const levels=document.getElementById('levels'), levelsVal=document.getElementById('levelsVal');
-    const strength=document.getElementById('strength'), strengthVal=document.getElementById('strengthVal');
-    const applyCSFBtn=document.getElementById('applyCSF');
-    const autoCSF=document.getElementById('autoCSF');
-
-    function snellenFromLogMAR(lv){ const s=Math.pow(10,-lv); const den=Math.round(20/s); return `20/${den}`; }
-    function labels(){
-      const lv=Number(logmar.value); logmarVal.textContent=lv.toFixed(2); snellen.textContent=snellenFromLogMAR(lv);
-      prVal.textContent=Number(pr.value).toFixed(2);
-      levelsVal.textContent=levels.value; strengthVal.textContent=Number(strength.value).toFixed(2);
+    // Vision filter controls
+    const logmar = document.getElementById('logmar');
+    const logmarVal = document.getElementById('logmarVal');
+    const snellen = document.getElementById('snellen');
+    const peakCS = document.getElementById('peakCS');
+    const peakCSVal = document.getElementById('peakCSVal');
+    const levels = document.getElementById('levels');
+    const levelsVal = document.getElementById('levelsVal');
+    const strength = document.getElementById('strength');
+    const strengthVal = document.getElementById('strengthVal');
+    const autoApply = document.getElementById('autoApply');
+    const showDebug = document.getElementById('showDebug');
+    
+    // Update display values and Snellen conversion
+    function snellenFromLogMAR(logMAR){
+      const snellenDecimal = Math.pow(10, -logMAR);
+      const denominator = Math.round(20 / snellenDecimal);
+      return `20/${denominator}`;
     }
-    function applyIfAuto(){
-      if(autoCSF && autoCSF.checked){
+    
+    function updateLabels(){
+      const logMARValue = Number(logmar.value);
+      logmarVal.textContent = logMARValue.toFixed(2);
+      snellen.textContent = snellenFromLogMAR(logMARValue);
+      peakCSVal.textContent = peakCS.value;
+      levelsVal.textContent = levels.value;
+      strengthVal.textContent = Number(strength.value).toFixed(2);
+    }
+    
+    function autoApplyFilter(){
+      if(autoApply?.checked && origMat){
         resetProcessed();
-        applyCSF(Number(logmar.value), Number(pr.value), Number(levels.value), Number(strength.value));
+        applyVisionFilter();
       }
     }
-    labels();
-    [logmar,pr,levels,strength].forEach(el=>el.addEventListener('input', ()=>{ labels(); applyIfAuto(); }));
-    applyCSFBtn.addEventListener('click', ()=>applyCSF(Number(logmar.value), Number(pr.value), Number(levels.value), Number(strength.value)));
-
-    const blur=document.getElementById('blur'), blurVal=document.getElementById('blurVal');
-    document.getElementById('applyBlur').addEventListener('click', ()=>applyBlur(Number(blur.value)));
-    blur.addEventListener('input', ()=>{ blurVal.textContent=blur.value; });
-
-    const canny1=document.getElementById('canny1'), canny2=document.getElementById('canny2');
-    document.getElementById('applyCanny').addEventListener('click', ()=>applyCanny(Number(canny1.value), Number(canny2.value)));
-
-    const yellowing=document.getElementById('yellowing'), yellVal=document.getElementById('yellVal');
-    document.getElementById('applyYellow').addEventListener('click', ()=>applyYellowing(Number(yellowing.value)));
-    yellowing.addEventListener('input', ()=>{ yellVal.textContent=yellowing.value; });
-
-    const contrast=document.getElementById('contrast'), contrastVal=document.getElementById('contrastVal');
-    document.getElementById('applyContrast').addEventListener('click', ()=>applyGlobalContrast(Number(contrast.value)));
-    contrast.addEventListener('input', ()=>{ contrastVal.textContent=contrast.value; });
-
-    const scSize=document.getElementById('scSize'), scSizeVal=document.getElementById('scSizeVal');
-    const scFeather=document.getElementById('scFeather'), scFeatherVal=document.getElementById('scFeatherVal');
-    document.getElementById('applyScotoma').addEventListener('click', ()=>applyScotoma(Number(scSize.value), Number(scFeather.value)));
-    scSize.addEventListener('input', ()=>{ scSizeVal.textContent=scSize.value; });
-    scFeather.addEventListener('input', ()=>{ scFeatherVal.textContent=scFeather.value; });
-
-    document.getElementById('reset').addEventListener('click', resetProcessed);
-    document.getElementById('download').addEventListener('click', ()=>{
-      const proc=document.getElementById('proc'); const link=document.createElement('a');
-      link.download='processed.png'; link.href=proc.toDataURL('image/png'); link.click();
+    
+    // Initialize labels
+    updateLabels();
+    
+    // Add event listeners for vision filter controls
+    [logmar, peakCS, levels, strength].forEach(el => {
+      el.addEventListener('input', () => {
+        updateLabels();
+        autoApplyFilter();
+      });
     });
+    
+    document.getElementById('applyCSF').addEventListener('click', () => {
+      resetProcessed();
+      applyVisionFilter();
+    });
+    
+    // Debug mode toggle
+    showDebug.addEventListener('change', (e) => {
+      debugMode = e.target.checked;
+      if(!debugMode){
+        setDebugInfo('');
+      }
+    });
+
+    // Other effect controls
+    const blur = document.getElementById('blur');
+    const blurVal = document.getElementById('blurVal');
+    document.getElementById('applyBlur').addEventListener('click', () => {
+      applyBlur(Number(blur.value));
+    });
+    blur.addEventListener('input', () => {
+      blurVal.textContent = blur.value;
+    });
+
+    const yellowing = document.getElementById('yellowing');
+    const yellVal = document.getElementById('yellVal');
+    document.getElementById('applyYellow').addEventListener('click', () => {
+      applyYellowing(Number(yellowing.value));
+    });
+    yellowing.addEventListener('input', () => {
+      yellVal.textContent = yellowing.value;
+    });
+
+    const contrast = document.getElementById('contrast');
+    const contrastVal = document.getElementById('contrastVal');
+    document.getElementById('applyContrast').addEventListener('click', () => {
+      applyGlobalContrast(Number(contrast.value));
+    });
+    contrast.addEventListener('input', () => {
+      contrastVal.textContent = contrast.value;
+    });
+
+    const scSize = document.getElementById('scSize');
+    const scSizeVal = document.getElementById('scSizeVal');
+    const scFeather = document.getElementById('scFeather');
+    const scFeatherVal = document.getElementById('scFeatherVal');
+    document.getElementById('applyScotoma').addEventListener('click', () => {
+      applyScotoma(Number(scSize.value), Number(scFeather.value));
+    });
+    scSize.addEventListener('input', () => {
+      scSizeVal.textContent = scSize.value;
+    });
+    scFeather.addEventListener('input', () => {
+      scFeatherVal.textContent = scFeather.value;
+    });
+
+    // Control buttons
+    document.getElementById('reset').addEventListener('click', resetProcessed);
+    
+    document.getElementById('download').addEventListener('click', () => {
+      if(!procCanvas){
+        setStatus('No processed image to download.');
+        return;
+      }
+      const link = document.createElement('a');
+      link.download = 'processed-vision-simulation.png';
+      link.href = procCanvas.toDataURL('image/png');
+      link.click();
+      setStatus('Image downloaded.');
+    });
+    
+    setStatus('Ready. Upload an image to begin.');
   });
   </script>
 </body>
