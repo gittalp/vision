@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Low Vision Simulator – ver35</title>
+<script src="https://cdn.jsdelivr.net/npm/exif-js@2.3.0/exif.js"></script>
+<style>
+  :root{ --bg:#0b1020; --panel:#121a33; --muted:#8ea0d0; --accent:#7aa2ff; --accent2:#ff7a7a; }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:#e6ecff;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;}
+  header{padding:14px 18px;border-bottom:1px solid #1e2a54;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  header h1{font-size:18px;margin:0;font-weight:600;color:#eaf}
+  .wrap{display:grid;grid-template-columns:420px 1fr;gap:16px;padding:16px}
+  @media (max-width:1180px){.wrap{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid #1e2a54;border-radius:14px;box-shadow:0 6px 16px rgba(3,10,28,0.3)}
+  .controls{padding:16px;display:flex;flex-direction:column;gap:16px;max-height:calc(100vh - 80px);overflow:auto}
+  .group{border:1px solid #1e2a54;border-radius:12px;padding:12px}
+  .gtitle{font-size:13px;font-weight:700;color:#cfe;margin-bottom:6px}
+  .row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:6px 0}
+  label{flex:1 0 170px;color:#d6e1ff;font-size:13px}
+  input[type=range], select{flex:1 1 160px}
+  input[type=checkbox]{transform:scale(1.1)}
+  .hint{font-size:12px;color:#8ea0d0}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .btn{background:#1a2550;border:1px solid #2c3b78;color:#fff;padding:8px 10px;border-radius:10px;cursor:pointer}
+  .btn:hover{background:#213064}
+  .btn.secondary{background:#222a46}
+  .canvaswrap{padding:12px}
+  canvas{width:100%;height:auto;border-radius:12px;background:#000}
+  .title{font-size:13px;font-weight:600;color:#cfe}
+</style>
+</head>
+<body>
+<header>
+  <h1>Low Vision Simulator</h1>
+  <button id="btnSample" class="btn">Use Sample Scene</button>
+  <input id="fileInput" type="file" accept="image/*" hidden>
+  <button id="btnUpload" class="btn secondary">Upload Image</button>
+  <button id="btnReset" class="btn secondary">Reset</button>
+</header>
+
+<div class="wrap">
+  <div class="card controls">
+
+    <!-- Camera & FOV -->
+    <div class="group">
+      <div class="gtitle">Camera &amp; FOV</div>
+      <div class="row hint" id="camInfo">Detected camera: —</div>
+      <div class="row hint" id="fovInfo">Detected FOV: —</div>
+      <div class="row">
+        <label>Manual HFOV (°): <span id="manHFOVV">90</span></label>
+        <input type="range" id="manHFOV" min="20" max="120" step="1" value="90" />
+      </div>
+      <div class="row hint">Portrait images automatically use sensor height for HFOV. APS‑C fallback for Canon/Nikon/Sony if 35mm‑equiv is missing.</div>
+    </div>
+
+    <div class="group">
+      <div class="gtitle">Viewing Geometry</div>
+      <div class="row">
+        <label>Projection</label>
+        <select id="projection">
+          <option value="rect">Rectilinear</option>
+          <option value="fe_eqdist">Fisheye – Equidistant</option>
+          <option value="fe_equisolid">Fisheye – Equisolid</option>
+        </select>
+      </div>
+      <div class="row">
+        <label>Fisheye radius (% of half‑width): <span id="fradV">50%</span></label>
+        <input type="range" id="feRadius" min="30" max="50" step="1" value="50" />
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="gtitle">Acuity & Contrast</div>
+      <div class="row">
+        <label>Engine</label>
+        <select id="acuEngine">
+          <option value="gauss">Gaussian (fast)</option>
+          <option value="csf2">CSF-lite (two‑band)</option>
+        </select>
+      </div>
+      <div class="row">
+        <label>Severity Preset</label>
+        <select id="severity">
+          <option value="custom">Custom</option>
+          <option value="normal">Normal (20/20)</option>
+          <option value="mild">Mild (20/45)</option>
+          <option value="moderate">Moderate (20/115)</option>
+          <option value="severe">Severe (20/285)</option>
+          <option value="profound">Profound (20/710)</option>
+        </select>
+      </div>
+      <div class="row"><label>logMAR: <span id="acuityV">0.35</span></label><input type="range" id="acuity" min="0" max="1.8" step="0.05" value="0.35" /></div>
+      <div class="row"><label>Pelli‑Robson: <span id="prV">1.48</span></label><input type="range" id="pr" min="0.0" max="2.2" step="0.02" value="1.48" /></div>
+      <div class="row"><label>Saturation: <span id="satV">100%</span></label><input type="range" id="sat" min="0" max="100" step="1" value="100" /></div>
+    </div>
+
+    <div class="group">
+      <div class="gtitle"><label><input id="enableCataract" type="checkbox" /> Cataracts</label></div>
+      <div class="row"><label>Engine</label>
+        <select id="catEngine">
+          <option value="uniform">Uniform haze (global wash)</option>
+          <option value="edgeveil">Edge veil (peripheral)</option>
+        </select>
+      </div>
+      <div class="row"><label>Veiling strength: <span id="vgV">25%</span></label><input type="range" id="veil" min="0" max="90" step="1" value="25" /></div>
+      <div class="row"><label>Veil blur (px): <span id="vgBlurV">15</span></label><input type="range" id="veilBlur" min="0" max="60" step="1" value="15" /></div>
+      <div class="row"><label>Yellowing: <span id="ylV">35%</span></label><input type="range" id="yellow" min="0" max="100" step="1" value="35" /></div>
+    </div>
+
+    <div class="group">
+      <div class="gtitle"><label><input id="enableGlaucoma" type="checkbox" /> Glaucoma</label></div>
+      <div class="row"><label>Field loss: <span id="glauFldV">0%</span></label><input type="range" id="glauFld" min="0" max="90" step="5" value="0" /></div>
+      <div class="row"><label>Extra contrast loss: <span id="glauCLV">0%</span></label><input type="range" id="glauCL" min="0" max="30" step="1" value="0" /></div>
+      <div class="row"><label><input id="clinicalPreset" type="checkbox" /> Clinical field (90°H × 60°/70°V)</label></div>
+    </div>
+
+    <div class="group">
+      <div class="gtitle"><label><input id="enableDR" type="checkbox" /> Diabetic Retinopathy</label></div>
+      <div class="row hint">Classic irregular floaters, masked to visible region</div>
+      <div class="row"><label>Floater density: <span id="drDenV">40</span></label><input type="range" id="drDen" min="0" max="100" step="1" value="40" /></div>
+      <div class="row"><label>Floater size (px): <span id="drSizeV">16</span></label><input type="range" id="drSize" min="6" max="40" step="1" value="16" /></div>
+      <div class="row"><label>Darkness: <span id="drDarkV">70%</span></label><input type="range" id="drDark" min="0" max="100" step="1" value="70" /></div>
+      <div class="row"><button id="regenDR" class="btn secondary">Regenerate floaters</button></div>
+    </div>
+
+    <div class="group">
+      <div class="gtitle"><label><input id="enableAMD" type="checkbox" /> AMD (Macular Degeneration)</label></div>
+      <div class="row"><label>Scotoma size (%): <span id="amdSizeV">18%</span></label><input type="range" id="amdSize" min="0" max="40" step="1" value="18" /></div>
+      <div class="row"><label>Irregularity: <span id="amdIrV">20%</span></label><input type="range" id="amdIr" min="0" max="80" step="1" value="20" /></div>
+      <div class="row"><label>Eccentricity / elongation: <span id="amdEccV">0%</span></label><input type="range" id="amdEcc" min="0" max="100" step="1" value="0" /></div>
+      <div class="row"><label>Feather (px): <span id="amdSoftV">24</span></label><input type="range" id="amdSoft" min="0" max="80" step="1" value="24" /></div>
+      <div class="row"><button id="regenAMD" class="btn secondary">Randomize scotoma</button></div>
+    </div>
+
+    <div class="group">
+      <div class="gtitle">Hazard Detection</div>
+      <div class="row"><label><input id="edgeOverlay" type="checkbox" /> Show lost edges</label></div>
+      <div class="row"><label>Sensitivity: <span id="edgeV">50</span></label><input type="range" id="edgeSens" min="0" max="100" step="1" value="50" /></div>
+    </div>
+
+  </div>
+
+  <div class="card canvaswrap">
+    <div class="grid">
+      <div><div class="title">Original</div><canvas id="orig"></canvas></div>
+      <div><div class="title">Simulated</div><canvas id="sim"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<script>
+let origCanvas = document.getElementById('orig');
+let simCanvas  = document.getElementById('sim');
+let octx = origCanvas.getContext('2d');
+let sctx = simCanvas.getContext('2d');
+let originalImage=null;
+let currentPPD=60, drField=null, drW=0, drH=0, drSeed=1234567, amdSeed=2345678;
+let exifTags=null, detectedModel='—', fovHF=90, fovVF=60;
+
+const qs = id=>document.getElementById(id);
+const clamp=(x,a,b)=>x<a?a:(x>b?b:x);
+const DEG=Math.PI/180, RAD=180/Math.PI;
+
+function getManualHFOV(){
+  const v = Number(qs('manHFOV').value); return isFinite(v)&&v>0? v : (fovHF||90);
+}
+
+function updatePPD(){
+  const w=origCanvas.width, h=origCanvas.height;
+  const proj=qs('projection').value;
+  if(proj==='rect'){
+    currentPPD = w / getManualHFOV();
+  }else{
+    const radiusPct = Number(qs('feRadius').value);
+    const diameter = (radiusPct/50) * Math.min(w,h);
+    currentPPD = diameter/180;
+  }
+}
+function fisheyeRadiusPx(){
+  const w=origCanvas.width, h=origCanvas.height;
+  const radiusPct = Number(qs('feRadius').value);
+  return (radiusPct/50) * (Math.min(w,h)/2);
+}
+
+function asNumber(v){
+  if(typeof v==='number') return v;
+  if(v && typeof v.numerator==='number' && typeof v.denominator==='number') return v.numerator/v.denominator;
+  const n=Number(v); return isFinite(n)?n:NaN;
+}
+function computeAndShowFOV(){
+  if(!originalImage) return;
+  const w=origCanvas.width, h=origCanvas.height; const portrait = h>w;
+  const make=(exifTags&&exifTags.Make?String(exifTags.Make):'').trim();
+  const model=(exifTags&&exifTags.Model?String(exifTags.Model):'').trim();
+  const fl35n = exifTags?asNumber(exifTags.FocalLengthIn35mmFilm):NaN;
+  const fln   = exifTags?asNumber(exifTags.FocalLength):NaN;
+  let fl35 = isFinite(fl35n)?fl35n:null; let crop=null;
+  if(!fl35 && isFinite(fln)){
+    if(/Canon/i.test(make)){ crop = /(6D|5D|1D|R3|R5|R6|EOS R(?!P))/i.test(model)?1.0:1.6; }
+    else if(/Nikon/i.test(make)){ crop = /(Z\\s*[67]|D[3-6]|D8)/i.test(model)?1.0:1.5; }
+    else if(/Sony/i.test(make)){ crop = /(A7|ILCE-7)/i.test(model)?1.0:1.5; }
+    else if(/Olympus|OM System|Panasonic/i.test(make)){ crop = 2.0; }
+    if(crop) fl35 = fln*crop;
+  }
+  const sensW35 = portrait?24:36; const sensH35 = portrait?36:24;
+  let HFOV, VFOV;
+  if(fl35){
+    HFOV = 2*Math.atan(sensW35/(2*fl35))*RAD; VFOV = 2*Math.atan(sensH35/(2*fl35))*RAD;
+  }else{ // fallback ~50mm eq
+    HFOV = 2*Math.atan(sensW35/(2*50))*RAD; VFOV = 2*Math.atan(sensH35/(2*50))*RAD;
+  }
+  detectedModel = (make||'?')+' '+(model||'?'); fovHF=HFOV; fovVF=VFOV;
+  qs('manHFOV').value = Math.round(HFOV);
+  updateLabels(); updatePPD();
+  qs('camInfo').textContent = `Detected camera: ${detectedModel}` + (isFinite(fln)?` | FL ${fln.toFixed(1)}mm`:``) + (fl35?` (≈${Math.round(fl35)}mm 35mm eq${crop?`, crop ${crop}×`:''})`:``);
+  qs('fovInfo').textContent = `Detected FOV — H ${HFOV.toFixed(1)}°, V ${VFOV.toFixed(1)}° (${portrait?'portrait':'landscape'})`;
+}
+function readExifAndDetect(file){
+  try{
+    if (window.EXIF && EXIF.getData) {
+      EXIF.getData(file, function(){ exifTags = EXIF.getAllTags(this)||{}; computeAndShowFOV(); });
+    }
+  }catch(e){ exifTags=null; }
+}
+
+function srgbToLin(c){ c/=255; return c<=0.04045? c/12.92 : Math.pow((c+0.055)/1.055,2.4); }
+function linToSrgb(l){ const c=l<=0.0031308? 12.92*l : 1.055*Math.pow(l,1/2.4)-0.055; return clamp(Math.round(c*255),0,255); }
+function gaussKernel(sigma){
+  const r=Math.max(1,Math.ceil(sigma*3)); const k=new Float32Array(2*r+1); let sum=0;
+  for(let i=-r;i<=r;i++){ const v=Math.exp(-0.5*(i*i)/(sigma*sigma)); k[i+r]=v; sum+=v; }
+  for(let i=0;i<k.length;i++) k[i]/=sum; return {k,r};
+}
+function convolveFloat(src,w,h,sigma){
+  const {k,r}=gaussKernel(Math.max(0.4,sigma)); const tmp=new Float32Array(w*h*3), out=new Float32Array(w*h*3);
+  for(let y=0;y<h;y++){ for(let x=0;x<w;x++){ let r0=0,g0=0,b0=0;
+    for(let i=-r;i<=r;i++){ const xx=Math.max(0,Math.min(w-1,x+i)); const p=(y*w+xx)*3; const kv=k[i+r]; r0+=src[p]*kv; g0+=src[p+1]*kv; b0+=src[p+2]*kv; }
+    const t=(y*w+x)*3; tmp[t]=r0; tmp[t+1]=g0; tmp[t+2]=b0; } }
+  for(let x=0;x<w;x++){ for(let y=0;y<h;y++){ let r0=0,g0=0,b0=0;
+    for(let i=-r;i<=r;i++){ const yy=Math.max(0,Math.min(h-1,y+i)); const p=(yy*w+x)*3; const kv=k[i+r]; r0+=tmp[p]*kv; g0+=tmp[p+1]*kv; b0+=tmp[p+2]*kv; }
+    const t=(y*w+x)*3; out[t]=r0; out[t+1]=g0; out[t+2]=b0; } }
+  return out;
+}
+function blurLinearRGB(img,sigma){
+  const w=img.width,h=img.height,d=img.data,src=new Float32Array(w*h*3);
+  for(let i=0,p=0;i<d.length;i+=4,p+=3){ src[p]=srgbToLin(d[i]); src[p+1]=srgbToLin(d[i+1]); src[p+2]=srgbToLin(d[i+2]); }
+  const bl=convolveFloat(src,w,h,sigma);
+  const out=new ImageData(w,h);
+  for(let p=0,i=0;i<out.data.length;i+=4,p+=3){
+    out.data[i]=linToSrgb(bl[p]); out.data[i+1]=linToSrgb(bl[p+1]); out.data[i+2]=linToSrgb(bl[p+2]); out.data[i+3]=255;
+  } return out;
+}
+
+function applyAcuity(img){
+  const logMAR=+qs('acuity').value, engine=qs('acuEngine').value;
+  const snellen=Math.pow(10,-logMAR); const sigmaDeg=0.30*(1-snellen); const sigmaPx=sigmaDeg*currentPPD;
+  if(engine==='gauss' || logMAR<1e-4){ return blurLinearRGB(img, sigmaPx); }
+  const low = blurLinearRGB(img, Math.max(0.6,sigmaPx*1.6));
+  const mid = blurLinearRGB(img, Math.max(0.6,sigmaPx*0.6));
+  const out = new ImageData(img.width,img.height);
+  const d0=img.data, dl=low.data, dm=mid.data, o=out.data;
+  const pr=+qs('pr').value; const contrastGain = Math.min(1, Math.pow(10,pr)/Math.pow(10,1.95));
+  const hiGain = Math.max(0, Math.min(1, 1 - 0.85*logMAR)) * contrastGain;
+  for(let i=0;i<o.length;i+=4){
+    const hr=d0[i]-dm[i], hg=d0[i+1]-dm[i+1], hb=d0[i+2]-dm[i+2];
+    o[i]=clamp(Math.round(dl[i] + hiGain*hr),0,255);
+    o[i+1]=clamp(Math.round(dl[i+1] + hiGain*hg),0,255);
+    o[i+2]=clamp(Math.round(dl[i+2] + hiGain*hb),0,255);
+    o[i+3]=255;
+  }
+  return out;
+}
+function applyContrastAndSat(img){
+  const pr=+qs('pr').value, S=Math.pow(10,pr), S0=Math.pow(10,1.95), k=Math.min(1,S/S0);
+  const s=+qs('sat').value/100, d=img.data;
+  for(let i=0;i<d.length;i+=4){
+    const r=d[i],g=d[i+1],b=d[i+2], y=0.299*r+0.587*g+0.114*b;
+    let r1=y+(r-y)*k, g1=y+(g-y)*k, b1=y+(b-y)*k;
+    r1=y+(r1-y)*s; g1=y+(g1-y)*s; b1=y+(b1-y)*s;
+    d[i]=r1; d[i+1]=g1; d[i+2]=b1;
+  }
+  return img;
+}
+
+function applyCataracts(img){
+  if(!qs('enableCataract').checked) return img;
+  const engine=qs('catEngine').value, k=+qs('veil').value/100, blur=+qs('veilBlur').value;
+  const w=img.width,h=img.height; const base=new ImageData(new Uint8ClampedArray(img.data), w,h);
+  const soft=blurLinearRGB(base, Math.max(0.1,blur));
+  if(engine==='uniform'){
+    for(let i=0;i<base.data.length;i+=4){
+      base.data[i]  = base.data[i]*(1-k)  + soft.data[i]*k;
+      base.data[i+1]= base.data[i+1]*(1-k)+ soft.data[i+1]*k;
+      base.data[i+2]= base.data[i+2]*(1-k)+ soft.data[i+2]*k;
+    }
+  }else{
+    const cx=w/2, cy=h/2, maxr=Math.hypot(cx,cy);
+    for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+      const r=Math.hypot(x-cx,y-cy)/maxr; const m=Math.pow(Math.max(0,Math.min(1,r)),0.85)*k; const i=(y*w+x)*4;
+      base.data[i]  = base.data[i]*(1-m)  + soft.data[i]*m;
+      base.data[i+1]= base.data[i+1]*(1-m)+ soft.data[i+1]*m;
+      base.data[i+2]= base.data[i+2]*(1-m)+ soft.data[i+2]*m;
+    }
+  }
+  const yk=+qs('yellow').value/100;
+  if(yk>0){
+    for(let i=0;i<base.data.length;i+=4){
+      base.data[i+1] = clamp(Math.round(base.data[i+1]*(1-0.18*yk) + base.data[i]*(0.05*yk)),0,255);
+      base.data[i+2] = clamp(Math.round(base.data[i+2]*(1-0.50*yk) + base.data[i]*(0.08*yk)),0,255);
+    }
+  }
+  return base;
+}
+
+function applyGlaucoma(img){
+  if(!qs('enableGlaucoma').checked) return img;
+  const loss = +qs('glauFld').value/100, extra = +qs('glauCL').value/100;
+  if(loss<=0 && extra<=0) return img;
+
+  const w=img.width,h=img.height,d=img.data;
+  const proj=qs('projection').value, clinical=qs('clinicalPreset').checked;
+  const keep=1-loss, feather=0.15;
+  const cx=w/2, cy=h/2, R = (proj==='rect') ? null : fisheyeRadiusPx();
+
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+    let rho;
+    if(proj==='rect'){
+      const HF=90, VF_top=clinical?60:90, VF_bot=clinical?70:90;
+      const nx=(x+0.5 - w/2)/(w/2), ny=(y+0.5 - h/2)/(h/2);
+      const ax = Math.atan(nx*Math.tan((HF*DEG)/2))*RAD;
+      const ay = Math.atan(ny*Math.tan((2*Math.atan((h/w)*Math.tan((HF*DEG)/2)))/2))*RAD;
+      const VF = (y < h/2) ? VF_top : VF_bot;
+      rho = Math.hypot(ax/90, ay/VF);
+    }else{
+      const r = Math.hypot(x-cx,y-cy);
+      rho = r / R;
+    }
+    let wgt=1.0;
+    if(rho>keep){
+      const t = clamp((rho-keep)/Math.max(1e-6,feather),0,1);
+      wgt = 1 - (t*t*(3-2*t));
+    }
+    const i=(y*w+x)*4;
+    d[i]*=wgt; d[i+1]*=wgt; d[i+2]*=wgt;
+    if(extra>0){
+      const lum=0.299*d[i]+0.587*d[i+1]+0.114*d[i+2];
+      d[i]=lum+(d[i]-lum)*(1-extra); d[i+1]=lum+(d[i+1]-lum)*(1-extra); d[i+2]=lum+(d[i+2]-lum)*(1-extra);
+    }
+  }
+  return img;
+}
+
+// DR
+function rand(){ drSeed ^= drSeed<<13; drSeed ^= drSeed>>>17; drSeed ^= drSeed<<5; return (drSeed>>>0)/4294967296; }
+function buildDRAlphaMask(w,h, density, sizePx){
+  const c=document.createElement('canvas'); c.width=w; c.height=h; const ctx=c.getContext('2d');
+  ctx.clearRect(0,0,w,h);
+  if(qs('projection').value!=='rect'){
+    const R=fisheyeRadiusPx(), cx=w/2, cy=h/2;
+    ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.clip();
+  }
+  const N = Math.max(1, Math.round(density*1.2));
+  for(let i=0;i<N;i++){
+    const cx = Math.floor(rand()*w), cy=Math.floor(rand()*h);
+    const s  = sizePx*(0.6+1.2*rand());
+    const kinks = 4 + Math.floor(rand()*5);
+    ctx.beginPath(); ctx.moveTo(cx+s, cy);
+    for(let j=0;j<kinks;j++){
+      const ang = rand()*2*Math.PI, r = s*(0.5+rand());
+      ctx.quadraticCurveTo(cx + Math.cos(ang)*r, cy + Math.sin(ang)*r,
+                           cx + Math.cos(ang+0.5)*r, cy + Math.sin(ang+0.5)*r);
+    }
+    ctx.closePath();
+    ctx.fillStyle='rgba(0,0,0,1)';
+    ctx.globalAlpha=0.9; ctx.fill(); ctx.globalAlpha=1;
+  }
+  ctx.filter='blur('+(Math.max(1,Math.round(sizePx*0.35)))+'px)';
+  const snap=ctx.getImageData(0,0,w,h); ctx.putImageData(snap,0,0); ctx.filter='none';
+  if(qs('projection').value!=='rect') ctx.restore();
+  const data=ctx.getImageData(0,0,w,h).data;
+  const alpha=new Float32Array(w*h);
+  for(let i=0,p=0;i<data.length;i+=4,p++) alpha[p] = data[i+3]/255;
+  return alpha;
+}
+function applyDR(img, den, size, dark){
+  if(den<=0 || dark<=0) return img;
+  const w=img.width,h=img.height;
+  if(!drField || drW!==w || drH!==h){ drField=null; }
+  if(!drField){
+    drField = buildDRAlphaMask(w,h, den, size); drW=w; drH=h;
+  }
+  const d=img.data, m=drField;
+  for(let i=0,p=0;i<d.length;i+=4,p++){
+    const k = dark * m[p];
+    d[i]=d[i]*(1-k); d[i+1]=d[i+1]*(1-k); d[i+2]=d[i+2]*(1-k);
+  }
+  return img;
+}
+
+// AMD with eccentricity + feather that doesn't grow area
+function applyAMD(img, sizePct, irregularityPct, softPx, eccPct){
+  if(sizePct<=0) return img;
+  const w=img.width,h=img.height; const cx=w/2, cy=h/2;
+  const rTarget=(sizePct/100)*Math.min(w,h)*0.5;
+  const shrink = Math.max(0, softPx);
+  const rDraw = Math.max(2, rTarget - shrink);
+  const ecc = Math.max(0, Math.min(1, eccPct/100));
+
+  // Orientation from seed
+  const phi = ((amdSeed*9301 + 49297) % 233280)/233280 * Math.PI*2;
+  const off = ecc * rTarget * 0.75;
+  const cx2 = cx + off*Math.cos(phi), cy2 = cy + off*Math.sin(phi);
+
+  const m=document.createElement('canvas'); m.width=w; m.height=h; const mc=m.getContext('2d');
+  const steps=256; const amp=rDraw*(irregularityPct/100)*0.35; const basePh=(amdSeed % 6283)/1000;
+  mc.beginPath();
+  for(let i=0;i<=steps;i++){
+    const t=(i/steps)*Math.PI*2;
+    const ph1 = basePh + 2.3, ph2 = basePh*1.7 + 0.9, ph3 = basePh*2.1 + 1.4, ph4 = basePh*2.9 + 0.2;
+    const jitUnit = 0.55*Math.sin(2*t + ph1) + 0.40*Math.sin(3*t + ph2) + 0.28*Math.sin(5*t + ph3) +
+                    0.20*Math.sin(7*t + ph4) + 0.15*Math.sin(11*t + ph2*0.7) + 0.12*Math.sin(13*t + ph3*0.6);
+    const r = Math.max(2, rDraw + amp*(jitUnit/2.0));
+
+    // oriented anisotropy
+    const c = Math.cos(t-phi), s = Math.sin(t-phi);
+    const ax = (1 + 0.9*ecc) * c;
+    const ay = (1 - 0.2*ecc) * s;
+    const xdir = Math.cos(phi)*ax - Math.sin(phi)*ay;
+    const ydir = Math.sin(phi)*ax + Math.cos(phi)*ay;
+
+    const x = cx2 + xdir*r;
+    const y = cy2 + ydir*r;
+    if(i===0) mc.moveTo(x,y); else mc.lineTo(x,y);
+  }
+  mc.closePath();
+  mc.fillStyle = 'rgba(0,0,0,1)';
+  mc.fill();
+
+  let src=m;
+  if(softPx>0){ const b=document.createElement('canvas'); b.width=w; b.height=h; const bc=b.getContext('2d'); bc.filter='blur('+softPx+'px)'; bc.drawImage(m,0,0); src=b; }
+  const md=src.getContext('2d').getImageData(0,0,w,h).data; const d=img.data;
+  for(let i=0;i<d.length;i+=4){ const a=md[i+3]/255; const keep=1-a; d[i]*=keep; d[i+1]*=keep; d[i+2]*=keep; }
+  return img;
+}
+
+// Hazard overlay
+function toGray(img){ const d=img.data,w=img.width,h=img.height,g=new Float32Array(w*h); for(let i=0,p=0;i<d.length;i+=4,p++) g[p]=0.299*d[i]+0.587*d[i+1]+0.114*d[i+2]; return {g,w,h}; }
+function sobel(g,w,h){
+  const Gx=[-1,0,1,-2,0,2,-1,0,1], Gy=[-1,-2,-1,0,0,0,1,2,1]; const out=new Float32Array(w*h);
+  for(let y=1;y<h-1;y++)for(let x=1;x<w-1;x++){
+    let sx=0,sy=0,k=0; for(let j=-1;j<=1;j++)for(let i=-1;i<=1;i++,k++){ const v=g[(y+j)*w+x+i]; sx+=Gx[k]*v; sy+=Gy[k]*v; }
+    out[y*w+x]=Math.hypot(sx,sy);
+  } return out;
+}
+function overlayLostEdges(orig, sim, sens){
+  const w=sim.width,h=sim.height, e1=sobel(toGray(orig).g,w,h), e2=sobel(toGray(sim).g,w,h);
+  const thr1=40*(1-sens/100), thr2=40*(1-sens/100); const sd=sim.data;
+  for(let y=1;y<h-1;y++)for(let x=1;x<w-1;x++){ const i=y*w+x; if(e1[i]>thr1 && e2[i]<thr2){ const p=i*4; sd[p]=255; sd[p+1]*=0.3; sd[p+2]*=0.3; } }
+  return sim;
+}
+
+function render(){
+  if(!origCanvas.width) return;
+  updatePPD();
+  const orig = octx.getImageData(0,0,origCanvas.width,origCanvas.height);
+  let img = octx.getImageData(0,0,origCanvas.width,origCanvas.height);
+  img = applyAcuity(img);
+  img = applyContrastAndSat(img);
+  img = applyCataracts(img);
+  img = applyGlaucoma(img);
+  if(qs('enableDR').checked){ img = applyDR(img, +qs('drDen').value, +qs('drSize').value, +qs('drDark').value/100); }
+  if(qs('enableAMD').checked){ img = applyAMD(img, +qs('amdSize').value, +qs('amdIr').value, +qs('amdSoft').value, +qs('amdEcc').value); }
+  if(qs('edgeOverlay').checked){ img = overlayLostEdges(orig, img, +qs('edgeSens').value); }
+  sctx.putImageData(img,0,0);
+}
+
+const PRESETS={normal:{logMAR:0.0,PR:2.0},mild:{logMAR:0.35,PR:1.48},moderate:{logMAR:0.75,PR:1.20},severe:{logMAR:1.15,PR:0.90},profound:{logMAR:1.55,PR:0.60}};
+qs('severity').addEventListener('change',()=>{const v=qs('severity').value;if(v==='custom')return;qs('acuity').value=PRESETS[v].logMAR;qs('pr').value=PRESETS[v].PR;updateLabels();render();});
+['projection','feRadius','acuEngine','acuity','pr','sat','enableCataract','catEngine','veil','veilBlur','yellow',
+ 'enableGlaucoma','glauFld','glauCL','clinicalPreset','enableDR','drDen','drSize','drDark','enableAMD','amdSize','amdIr','amdSoft','amdEcc',
+ 'edgeOverlay','edgeSens','manHFOV'
+].forEach(id=>{const el=qs(id); const evt=(el.type==='checkbox')?'change':'input'; el.addEventListener(evt,()=>{updateLabels(); render();});});
+qs('regenDR').onclick=()=>{ drField=null; drSeed=(Math.random()*1e9)|0; render(); };
+qs('regenAMD').onclick=()=>{ amdSeed=(Math.random()*1e9)|0; render(); };
+qs('btnUpload').onclick=()=>qs('fileInput').click();
+qs('fileInput').onchange=(e)=>{ const f=e.target.files[0]; if(!f) return; readExifAndDetect(f);
+  const img=new Image(); img.onload=function(){ originalImage=img;
+    const maxW=1600,maxH=1100; let w=img.naturalWidth,h=img.naturalHeight; const r=Math.min(maxW/w,maxH/h,1); w=Math.round(w*r); h=Math.round(h*r);
+    origCanvas.width=w; origCanvas.height=h; simCanvas.width=w; simCanvas.height=h; octx.drawImage(img,0,0,w,h); computeAndShowFOV(); render(); };
+  img.src=URL.createObjectURL(f);
+};
+qs('btnSample').onclick=()=>drawSampleScene();
+qs('btnReset').onclick=()=>{ ['enableCataract','enableGlaucoma','enableDR','enableAMD','edgeOverlay','clinicalPreset'].forEach(id=>qs(id).checked=false);
+  qs('severity').value='normal'; qs('acuity').value=0.0; qs('pr').value=2.0; qs('sat').value=100; qs('acuEngine').value='gauss';
+  qs('catEngine').value='uniform'; qs('veil').value=25; qs('veilBlur').value=15; qs('yellow').value=35;
+  qs('glauFld').value=0; qs('glauCL').value=0; qs('drDen').value=40; qs('drSize').value=16; qs('drDark').value=70; qs('amdSize').value=18; qs('amdIr').value=20; qs('amdSoft').value=24; qs('amdEcc').value=0; qs('manHFOV').value=Math.round(fovHF||90);
+  updateLabels(); render(); };
+function updateLabels(){
+  qs('fradV').textContent=qs('feRadius').value+'%';
+  qs('acuityV').textContent=Number(qs('acuity').value).toFixed(2);
+  qs('prV').textContent=Number(qs('pr').value).toFixed(2);
+  qs('satV').textContent=qs('sat').value+'%';
+  qs('vgV').textContent=qs('veil').value+'%'; qs('vgBlurV').textContent=qs('veilBlur').value; qs('ylV').textContent=qs('yellow').value+'%';
+  qs('glauFldV').textContent=qs('glauFld').value+'%'; qs('glauCLV').textContent=qs('glauCL').value+'%';
+  qs('drDenV').textContent=qs('drDen').value; qs('drSizeV').textContent=qs('drSize').value; qs('drDarkV').textContent=qs('drDark').value+'%';
+  qs('amdSizeV').textContent=qs('amdSize').value+'%'; qs('amdIrV').textContent=qs('amdIr').value+'%'; qs('amdEccV').textContent=qs('amdEcc').value+'%'; qs('amdSoftV').textContent=qs('amdSoft').value;
+  qs('manHFOVV').textContent=qs('manHFOV').value;
+}
+function drawSampleScene(w=1200,h=800){
+  origCanvas.width=w; origCanvas.height=h; simCanvas.width=w; simCanvas.height=h; const ctx=octx; ctx.clearRect(0,0,w,h);
+  const gr=ctx.createLinearGradient(0,0,0,h); gr.addColorStop(0,'#efefef'); gr.addColorStop(1,'#c8c8c8'); ctx.fillStyle=gr; ctx.fillRect(0,0,w,h);
+  ctx.fillStyle='#b0b0b0'; ctx.fillRect(0,h*0.55,w,h*0.45);
+  ctx.fillStyle='#999'; let x=w*0.12, y=h*0.55, stepW=w*0.3, stepH=h*0.035; for(let i=0;i<6;i++) ctx.fillRect(x,y+i*stepH, stepW-i*12, stepH-2);
+  ctx.strokeStyle='#222'; ctx.lineWidth=2; for(let i=0;i<6;i++){ ctx.beginPath(); ctx.moveTo(x,y+i*stepH); ctx.lineTo(x+stepW-i*12, y+i*stepH); ctx.stroke(); }
+  ctx.fillStyle='#e7e7e7'; ctx.fillRect(w*0.65,h*0.28,w*0.12,h*0.26); ctx.strokeStyle='#222'; ctx.strokeRect(w*0.65,h*0.28,w*0.12,h*0.26);
+  ctx.fillStyle='#224488'; ctx.fillRect(w*0.66,h*0.22,w*0.10,h*0.04);
+  ctx.strokeStyle='#444'; ctx.lineWidth=6; ctx.beginPath(); ctx.moveTo(w*0.12,h*0.52); ctx.lineTo(w*0.36,h*0.44); ctx.stroke();
+  const size=16; for(let yy=0; yy<8; yy++) for(let xx=0; xx<12; xx++){ ctx.fillStyle=((xx+yy)%2)?'#dcdcdc':'#f6f6f6'; ctx.fillRect(w*0.42+xx*size,h*0.60+yy*size,size,size); }
+  updatePPD(); render();
+}
+updateLabels(); drawSampleScene();
+</script>
+</body>
+</html>
