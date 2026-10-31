@@ -1,0 +1,17 @@
+VisionSim HDR Workspace - component notices
+
+DeVAS-derived contrast-sensitivity parameterization and filtering:
+    licenses/DEVAS-MIT.txt
+
+OpenEXR decoding adaptations:
+    licenses/EXR-NOTICES.txt
+
+Machado color-vision-deficiency reference tables:
+    licenses/CVD-NOTICE.txt
+
+The optional HEIF adapter and its codec-loading instructions are in vendor/.
+Its external codec retains its own upstream license notices.
+
+Angular reference-mask definitions and the independent numerical lookup table
+are documented in METHODS.html and js/guthdata.js. Required component notices
+remain with the respective source and distribution files.

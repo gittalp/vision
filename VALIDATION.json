@@ -1,0 +1,1600 @@
+{
+  "version": "0.6.0",
+  "date": "2026-10-31",
+  "numericalGroups": 117,
+  "extraTruncationChecks": 4,
+  "numerical": [
+    {
+      "tests": 13,
+      "passed": 13,
+      "results": [
+        {
+          "name": "clinical peak and preserved cutoff",
+          "pass": true
+        },
+        {
+          "name": "FFT roundtrip rectangular",
+          "pass": true
+        },
+        {
+          "name": "Exact EDT including empty mask",
+          "pass": true
+        },
+        {
+          "name": "Luminance DC, relative scale invariance, no mutation",
+          "pass": true
+        },
+        {
+          "name": "18 filter comparisons with NumPy desktop reference",
+          "pass": true,
+          "maximumAbsoluteError": 0
+        },
+        {
+          "name": "Statistics / signed values / mask / contrast invariance",
+          "pass": true
+        },
+        {
+          "name": "sRGB transforms and primaries",
+          "pass": true
+        },
+        {
+          "name": "HDR absolute roundtrip; no double scale",
+          "pass": true,
+          "maxRelativeError": 0.003176675063634735
+        },
+        {
+          "name": "PFM retains float32 signed Y in bottom-up order",
+          "pass": true
+        },
+        {
+          "name": "PFM nonfinite overflow and shape rejected",
+          "pass": true
+        },
+        {
+          "name": "Malformed HDR rejected",
+          "pass": true
+        },
+        {
+          "name": "Response fitting synthetic known gamma + radiance ratios",
+          "pass": true,
+          "responseRMSStops": 0.010269919973761721,
+          "ratioP95overP05": 1.017366426851661,
+          "arbitraryScale": 4.55468585077166
+        },
+        {
+          "name": "Reprojection centered constant field and support guard",
+          "pass": true
+        }
+      ]
+    },
+    {
+      "comparisons": 10,
+      "allPassed": true,
+      "truncationTests": 4,
+      "results": [
+        {
+          "file": "half_none.exr",
+          "pixels": 6208,
+          "maximumAbsoluteError": 0,
+          "pass": true
+        },
+        {
+          "file": "half_rle.exr",
+          "pixels": 6208,
+          "maximumAbsoluteError": 0,
+          "pass": true
+        },
+        {
+          "file": "half_zips.exr",
+          "pixels": 6208,
+          "maximumAbsoluteError": 0,
+          "pass": true
+        },
+        {
+          "file": "half_zip.exr",
+          "pixels": 6208,
+          "maximumAbsoluteError": 0,
+          "pass": true
+        },
+        {
+          "file": "half_piz.exr",
+          "pixels": 6208,
+          "maximumAbsoluteError": 0,
+          "pass": true
+        },
+        {
+          "file": "float_none.exr",
+          "pixels": 6208,
+          "maximumAbsoluteError": 0,
+          "pass": true
+        },
+        {
+          "file": "float_rle.exr",
+          "pixels": 6208,
+          "maximumAbsoluteError": 0,
+          "pass": true
+        },
+        {
+          "file": "float_zips.exr",
+          "pixels": 6208,
+          "maximumAbsoluteError": 0,
+          "pass": true
+        },
+        {
+          "file": "float_zip.exr",
+          "pixels": 6208,
+          "maximumAbsoluteError": 0,
+          "pass": true
+        },
+        {
+          "file": "float_piz.exr",
+          "pixels": 6208,
+          "maximumAbsoluteError": 0,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "tests": 17,
+      "passed": 17,
+      "results": [
+        {
+          "name": "Crop ray invariance: perspective",
+          "passed": true,
+          "samples": 154,
+          "maxRayComponentDifference": 3.3306690738754696e-16
+        },
+        {
+          "name": "Crop ray invariance: equidistant",
+          "passed": true,
+          "samples": 154,
+          "maxRayComponentDifference": 4.440892098500626e-16
+        },
+        {
+          "name": "Crop ray invariance: hemispherical",
+          "passed": true,
+          "samples": 154,
+          "maxRayComponentDifference": 3.3306690738754696e-16
+        },
+        {
+          "name": "Crop ray invariance: stereographic",
+          "passed": true,
+          "samples": 154,
+          "maxRayComponentDifference": 4.440892098500626e-16
+        },
+        {
+          "name": "Crop ray invariance: equisolid",
+          "passed": true,
+          "samples": 154,
+          "maxRayComponentDifference": 4.440892098500626e-16
+        },
+        {
+          "name": "Radiance off-center perspective crop equation",
+          "passed": true
+        },
+        {
+          "name": "Circle-derived angular view and exact offsets",
+          "passed": true
+        },
+        {
+          "name": "Exact float32 pixel crop, mask and original coordinates",
+          "passed": true
+        },
+        {
+          "name": "VIEW parse / serialize retains orientation and offsets",
+          "passed": true
+        },
+        {
+          "name": "Header-only edit preserves encoded pixels and exposure records",
+          "passed": true
+        },
+        {
+          "name": "Prepared HDR writes corrected geometry with calibrated scale",
+          "passed": true
+        },
+        {
+          "name": "Equisolid has explicit custom geometry, never fake -vth",
+          "passed": true
+        },
+        {
+          "name": "Negative channels are not silently clipped on RGBE export",
+          "passed": true
+        },
+        {
+          "name": "Streaming merge matches stack merge with 24 exposures",
+          "passed": true,
+          "exposures": 24,
+          "pixels": 1073,
+          "exactFloat32Match": true
+        },
+        {
+          "name": "Two-pass response samples reproduce full-image fit",
+          "passed": true
+        },
+        {
+          "name": "Memory gate is size-based, not an exposure-count cap",
+          "passed": true
+        },
+        {
+          "name": "Explicit equisolid-to-angular export preserves a constant radiance",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "groups": 22,
+      "passed": 22,
+      "tests": [
+        {
+          "name": "Full-frame 24 mm pinhole FOV and resizing invariance",
+          "passed": true
+        },
+        {
+          "name": "Portrait axes swap; actual sensor dimensions; unknown models not guessed",
+          "passed": true
+        },
+        {
+          "name": "Explicit aspect crop and in-app crop propagation",
+          "passed": true
+        },
+        {
+          "name": "35-mm-equivalent diagonal convention and focal-plane metadata",
+          "passed": true
+        },
+        {
+          "name": "EXIF actual and equivalent focal metadata retained",
+          "passed": true
+        },
+        {
+          "name": "All eight EXIF orientations permute without pixel alteration",
+          "passed": true
+        },
+        {
+          "name": "Linear zero-min range, endpoint ticks, under/over colors",
+          "passed": true
+        },
+        {
+          "name": "Log ticks are geometric; invalid ranges fail rather than silently reset",
+          "passed": true
+        },
+        {
+          "name": "Discrete false color has finite bands and matching endpoints",
+          "passed": true
+        },
+        {
+          "name": "XMP gain-map scalar/array metadata and inverse gamma formula",
+          "passed": true
+        },
+        {
+          "name": "ISO metadata fixture and backward-direction rejection",
+          "passed": true
+        },
+        {
+          "name": "Full HDR reconstruction recovers >1 float values and does not mutate SDR",
+          "passed": true
+        },
+        {
+          "name": "JPEG stream extraction excludes metadata from decoding, preserves compressed pixels",
+          "passed": true
+        },
+        {
+          "name": "Embedded sRGB ICC matrix/TRC supports linear native-color gain operation",
+          "passed": true
+        },
+        {
+          "name": "Native-generated HEIF container metadata and malformed box guard",
+          "passed": true
+        },
+        {
+          "name": "PQ and HLG inverse transfer arithmetic is explicit; not scene calibration",
+          "passed": true
+        },
+        {
+          "name": "Machado interpolation handles sub-0.1 severity; identity at zero",
+          "passed": true
+        },
+        {
+          "name": "Every educational condition deterministic; leaves source array unchanged",
+          "passed": true
+        },
+        {
+          "name": "Educational zero severity is identity and achromatopsia retains luminance",
+          "passed": true
+        },
+        {
+          "name": "Gaussian preserves constant RGB; ray-based color viewport preserves constant scene",
+          "passed": true
+        },
+        {
+          "name": "Apple XMP headroom is log2 gain, not legacy linear gain",
+          "passed": true
+        },
+        {
+          "name": "HEIF RGB16 adapter reads channel-reported 10-bit range and row padding (contract double, not codec validation)",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "passed": 9,
+      "total": 9,
+      "tests": [
+        {
+          "name": "CSS size and offset map to source pixel edges",
+          "passed": true
+        },
+        {
+          "name": "Rectangle drag works in all four directions",
+          "passed": true
+        },
+        {
+          "name": "Circle is square, fits source bounds, and maps to correct normalized radius",
+          "passed": true
+        },
+        {
+          "name": "Circle drag clips before crossing raster edge",
+          "passed": true
+        },
+        {
+          "name": "Selection move clamps without changing dimensions",
+          "passed": true
+        },
+        {
+          "name": "Rectangle resizing can cross opposite side without negative sizes",
+          "passed": true
+        },
+        {
+          "name": "Circle corner and side resizing preserve aspect and bounds",
+          "passed": true
+        },
+        {
+          "name": "Masked corner values are excluded, not treated as black measurements",
+          "passed": true
+        },
+        {
+          "name": "Exact crop preserves each selected float value without scaling",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "tests": 21,
+      "passed": 21,
+      "results": [
+        {
+          "name": "Clinical cutoff and sensitivity conversions retained",
+          "passed": true,
+          "seconds": 0.00012899399999999873,
+          "normalCutoff": 13.97896550965379
+        },
+        {
+          "name": "Angular separation uses ray dot/cross products, not summed axis angles",
+          "passed": true,
+          "seconds": 6.525800000000003e-05
+        },
+        {
+          "name": "Yaw pitch roll basis and inverse preserve rays",
+          "passed": true,
+          "seconds": 0.0005432859999999948
+        },
+        {
+          "name": "All circular projections round-trip pixels and rim angles",
+          "passed": true,
+          "seconds": 0.0005036660000000027
+        },
+        {
+          "name": "Circle geometry accounts for wide source margins and crop; no resize FOV change",
+          "passed": true,
+          "seconds": 0.0008501870000000054
+        },
+        {
+          "name": "Circular sampling warnings depend on both radius and projection",
+          "passed": true,
+          "seconds": 0.0010833080000000024,
+          "equidistantNyquist800": 2.2222222222222223,
+          "equisolidMinimumNyquist800": 1.7453292519943298
+        },
+        {
+          "name": "Solid-angle Jacobians integrate a forward hemisphere",
+          "passed": true,
+          "seconds": 0.139592801,
+          "steradians": {
+            "equidistant": {
+              "sum": 6.283157690983915,
+              "error": -2.761619567159812e-05
+            },
+            "equisolid": {
+              "sum": 6.2831500000681375,
+              "error": -3.530711144872356e-05
+            },
+            "stereographic": {
+              "sum": 6.28316779868639,
+              "error": -1.7508493196594088e-05
+            },
+            "hemispherical": {
+              "sum": 6.253063458668443,
+              "error": -0.030121848511143412
+            }
+          }
+        },
+        {
+          "name": "40-degree band is elevation +/-20 across the full captured horizontal field",
+          "passed": true,
+          "seconds": 0.000928293999999994
+        },
+        {
+          "name": "Cone field is a diameter, not an elevation band",
+          "passed": true,
+          "seconds": 5.624399999999241e-05
+        },
+        {
+          "name": "Gaze yaw, pitch and roll rotate the field rather than the source",
+          "passed": true,
+          "seconds": 4.17929999999842e-05
+        },
+        {
+          "name": "Guth total and binocular reference envelopes are distinct and left-right symmetric",
+          "passed": true,
+          "seconds": 0.0009786410000000103
+        },
+        {
+          "name": "Full-circle view covers disk, excludes corners, keeps source data untouched",
+          "passed": true,
+          "seconds": 0.04614791400000001,
+          "included": 12892
+        },
+        {
+          "name": "Angular band solid angle and weighted mean agree with analytic values",
+          "passed": true,
+          "seconds": 0.42378488500000006,
+          "computed": 2.1489984948431484,
+          "analytic": 2.148975939303298
+        },
+        {
+          "name": "Mask display never changes luminance, and binary output is truly binary",
+          "passed": true,
+          "seconds": 0.005525580999999989
+        },
+        {
+          "name": "Tangent patches fully cover a constant hemisphere without seams or dark rim",
+          "passed": true,
+          "seconds": 3.000882641,
+          "patches": 171,
+          "minWeight": 0.9621982350224969,
+          "scaleVariationPercent": 4.518029190898165
+        },
+        {
+          "name": "Whole-field constant preservation also holds for equisolid, stereo, hemispherical and narrow caps",
+          "passed": true,
+          "seconds": 8.449837352,
+          "projections": {
+            "equisolid180": {
+              "maxError": 0,
+              "patches": 171
+            },
+            "stereographic180": {
+              "maxError": 0,
+              "patches": 171
+            },
+            "hemispherical180": {
+              "maxError": 0,
+              "patches": 171
+            },
+            "equidistant20": {
+              "maxError": 0,
+              "patches": 7
+            }
+          }
+        },
+        {
+          "name": "Whole-field filter preserves positive scale invariance in relative mode",
+          "passed": true,
+          "seconds": 5.355301459000002,
+          "maximumAbsoluteError": 1.8310546874289457e-06
+        },
+        {
+          "name": "Different source projections give consistent local filtering on identical output rays",
+          "passed": true,
+          "seconds": 5.393110578,
+          "rmsDifference": 1.2489038547588934e-05,
+          "maximumDifference": 7.05718994140625e-05,
+          "inputBaseLuminance": 20
+        },
+        {
+          "name": "Angular Gaussian full-field processing preserves a constant color scene",
+          "passed": true,
+          "seconds": 1.0035880799999977
+        },
+        {
+          "name": "Educational circular field uses valid angular rays and leaves input unchanged",
+          "passed": true,
+          "seconds": 0.056723402999999964
+        },
+        {
+          "name": "Scattered field effects are repeatable on a circle",
+          "passed": true,
+          "seconds": 0.0521398569999983
+        }
+      ]
+    },
+    {
+      "passed": 25,
+      "total": 25
+    }
+  ],
+  "browserStages": 76,
+  "browserSuites": [
+    {
+      "suite": "legacy-core",
+      "count": 16,
+      "tests": [
+        {
+          "test": "startup and demo",
+          "passed": true,
+          "seconds": 0.367,
+          "result": 87.3361968556419
+        },
+        {
+          "test": "apply header geometry without pixel/calibration changes",
+          "passed": true,
+          "seconds": 0.224,
+          "result": {
+            "projection": "perspective",
+            "hfov": 60,
+            "vfov": 42.10344887074584,
+            "shift": 0,
+            "lift": 0,
+            "vp": [
+              0,
+              0,
+              0
+            ],
+            "vd": [
+              0,
+              1,
+              0
+            ],
+            "vu": [
+              0,
+              0,
+              1
+            ],
+            "fore": 0,
+            "aft": 0,
+            "confirmed": true
+          }
+        },
+        {
+          "test": "single patch calibration",
+          "passed": true,
+          "seconds": 0.331,
+          "result": 125.91401019076095
+        },
+        {
+          "test": "actual off-center crop with scale preservation",
+          "passed": true,
+          "seconds": 0.265,
+          "result": {
+            "size": [
+              500,
+              350
+            ],
+            "geometry": {
+              "projection": "perspective",
+              "hfov": 41.20038080162007,
+              "vfov": 29.48256686899771,
+              "shift": -0.02800000000000003,
+              "lift": 0.03142857142857143,
+              "vp": [
+                0,
+                0,
+                0
+              ],
+              "vd": [
+                0,
+                1,
+                0
+              ],
+              "vu": [
+                0,
+                0,
+                1
+              ],
+              "fore": 0,
+              "aft": 0,
+              "confirmed": true
+            }
+          }
+        },
+        {
+          "test": "cropped HDR export includes corrected VIEW",
+          "passed": true,
+          "seconds": 0.125,
+          "result": {
+            "bytes": 707542,
+            "view": "VIEW= -vtv -vp 0 0 0 -vd 0 1 0 -vu 0 0 1 -vh 41.2003808016 -vv 29.482566869 -vs -0.028 -vl 0.0314285714286 -vo 0 -va 0"
+          }
+        },
+        {
+          "test": "simulation uses applied cropped geometry",
+          "passed": true,
+          "seconds": 1.968,
+          "result": "Last run: perspective detail; Snellen 20/200, logMAR 1, Pelli-Robson 1; cutoff 1.3979 cycles/degree; peak sensitivity 19.\nConservative analysis sampling limit: 10.077 cycles/degree. The original camera sampling and optical resolution may impose stricter limits"
+        },
+        {
+          "test": "display controls do not alter measurements",
+          "passed": true,
+          "seconds": 0.165,
+          "result": true
+        },
+        {
+          "test": "JSON includes crop, calibration and applied geometry",
+          "passed": true,
+          "seconds": 0.062,
+          "result": "visionsim-hdr-report-v3"
+        },
+        {
+          "test": "undo restores full raster and metadata",
+          "passed": true,
+          "seconds": 0.135,
+          "result": true
+        },
+        {
+          "test": "header-only export does not apply session calibration",
+          "passed": true,
+          "seconds": 0.098,
+          "result": "Retained original relative file records despite a session patch calibration."
+        },
+        {
+          "test": "invalid crop does not destroy current image",
+          "passed": true,
+          "seconds": 0.231,
+          "result": true
+        },
+        {
+          "test": "manual VIEW draft parse and confirm",
+          "passed": true,
+          "seconds": 0.214,
+          "result": true
+        },
+        {
+          "test": "16-exposure browser merge (above former count cap)",
+          "passed": true,
+          "seconds": 0.541,
+          "result": {
+            "inputCount": 16,
+            "dimensions": [
+              128,
+              96
+            ],
+            "quality": {
+              "inputCount": 16,
+              "invalidPixels": 0,
+              "invalidFraction": 0,
+              "disagreementFraction": 0,
+              "disagreementRule": "weighted log-radiance SD >0.5 stop in any channel; not a validated motion classifier",
+              "alignment": "none; aligned static scene required",
+              "clippingRule": "all channels need at least one decoded code in [5,250]",
+              "processing": "two-pass streaming; no exposure-count cap"
+            }
+          }
+        },
+        {
+          "test": "size-based memory gate preserves previous result",
+          "passed": true,
+          "seconds": 0.147,
+          "result": true
+        },
+        {
+          "test": "mobile no horizontal overflow",
+          "passed": true,
+          "seconds": 0.367,
+          "result": {
+            "width": 390,
+            "scroll": 390
+          }
+        },
+        {
+          "test": "no uncaught page errors",
+          "passed": true
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "suite": "visual-crop",
+      "count": 15,
+      "tests": [
+        {
+          "name": "New demo remains relative; coordinates are optional",
+          "passed": true,
+          "seconds": 0.336,
+          "result": true
+        },
+        {
+          "name": "Draw rectangle on canvas without coordinate boxes; only Apply changes image",
+          "passed": true,
+          "seconds": 0.482,
+          "result": {
+            "rect": {
+              "x": 80,
+              "y": 60,
+              "w": 520,
+              "h": 360
+            },
+            "sourceDimensions": [
+              768,
+              512
+            ],
+            "sourceOrigin": {
+              "x": 0,
+              "y": 0
+            },
+            "method": "exact float32 pixel subset; no resize/interpolation",
+            "scalePreserved": 1,
+            "geometryUpdated": false,
+            "selectionShape": "rectangle",
+            "circleExcluded": false
+          }
+        },
+        {
+          "name": "On-canvas undo restores original raster",
+          "passed": true,
+          "seconds": 0.15,
+          "result": true
+        },
+        {
+          "name": "Move, resize, keyboard nudge and cancel leave no accidental crop",
+          "passed": true,
+          "seconds": 0.731,
+          "result": {
+            "x": 130,
+            "y": 91,
+            "w": 340,
+            "h": 259
+          }
+        },
+        {
+          "name": "Circle crop trims square bounds and excludes outside; no FOV guessed",
+          "passed": true,
+          "seconds": 0.567,
+          "result": {
+            "mask": {
+              "enabled": true,
+              "cx": 0.5,
+              "cy": 0.5,
+              "radius": 0.5
+            },
+            "valid": 145232
+          }
+        },
+        {
+          "name": "Mask-only option and undo do not crop or rescale",
+          "passed": true,
+          "seconds": 0.62,
+          "result": true
+        },
+        {
+          "name": "HDR file scale applied at import; repeated EXPOSURE and COLORCORR are reversed once",
+          "passed": true,
+          "seconds": 0.098,
+          "result": 89.150390625
+        },
+        {
+          "name": "Explicit relative route and single-click file-scale recovery",
+          "passed": true,
+          "seconds": 0.16,
+          "result": true
+        },
+        {
+          "name": "Patch calibration survives circle mask AND subsequent circular crop",
+          "passed": true,
+          "seconds": 0.899,
+          "result": 247.86823529411765
+        },
+        {
+          "name": "Pixel inspection respects mask and current calibrated scale before FOV",
+          "passed": true,
+          "seconds": 1.035,
+          "result": "Source pixel (60, 60): 123.45 cd/m\u00b2"
+        },
+        {
+          "name": "Crop, geometry, calibrated HDR export and reimport retain scale and circle",
+          "passed": true,
+          "seconds": 0.398,
+          "result": {
+            "before": 123.45,
+            "reimport": 123.6920593380928
+          }
+        },
+        {
+          "name": "Falsecolor range and preview exposure remain measurement-independent",
+          "passed": true,
+          "seconds": 0.119,
+          "result": true
+        },
+        {
+          "name": "Narrow viewport CSS scaling selects the same source pixels",
+          "passed": true,
+          "seconds": 0.744,
+          "result": {
+            "x": 140,
+            "y": 40,
+            "w": 430,
+            "h": 430
+          }
+        },
+        {
+          "name": "Pending header edits block crop without destroying draft or image",
+          "passed": true,
+          "seconds": 0.543,
+          "result": true
+        },
+        {
+          "name": "Full-resolution provided Photosphere HDR: visual circular crop with file scale retained",
+          "passed": true,
+          "seconds": 8.817,
+          "result": {
+            "originalMean": 6.172097682815567,
+            "croppedMean": 12.249310366730882,
+            "scale": 179,
+            "note": "Different whole-image means are expected from selecting a different pixel subset; the per-pixel multiplier is unchanged."
+          }
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "suite": "features-browser",
+      "count": 13,
+      "tests": [
+        {
+          "name": "FOV calculator integrates into confirmed VIEW",
+          "passed": true,
+          "seconds": 0.482,
+          "result": {
+            "projection": "perspective",
+            "hfov": 73.73979529168804,
+            "vfov": 53.13010235415598,
+            "shift": 0,
+            "lift": 0,
+            "vp": [
+              0,
+              0,
+              0
+            ],
+            "vd": [
+              0,
+              1,
+              0
+            ],
+            "vu": [
+              0,
+              0,
+              1
+            ],
+            "fore": 0,
+            "aft": 0,
+            "confirmed": true
+          }
+        },
+        {
+          "name": "Linear falsecolor includes zero, palette, bands and PNG legend",
+          "passed": true,
+          "seconds": 0.376,
+          "result": {
+            "pngBytes": 52964,
+            "range": [
+              "0",
+              "1000"
+            ]
+          }
+        },
+        {
+          "name": "Log minimum validation and recovery",
+          "passed": true,
+          "seconds": 0.245,
+          "result": 58007
+        },
+        {
+          "name": "Falsecolor is invariant to display exposure and source measurements",
+          "passed": true,
+          "seconds": 0.107,
+          "result": true
+        },
+        {
+          "name": "All educational conditions, deterministic spots, unchanged measurements and exports",
+          "passed": true,
+          "seconds": 1.754,
+          "result": {
+            "conditions": 7,
+            "pngBytes": 69283
+          }
+        },
+        {
+          "name": "Optional reduced-detail step precedes educational effect",
+          "passed": true,
+          "seconds": 0.676,
+          "result": true
+        },
+        {
+          "name": "Camera EXIF auto suggestion and reviewable rectilinear FOV",
+          "passed": true,
+          "seconds": 0.258,
+          "result": {
+            "sensor": {
+              "w": 36,
+              "h": 24,
+              "label": "Canon EOS 6D",
+              "source": "exact camera model preset"
+            },
+            "method": "sensor",
+            "focalLengthMM": 24,
+            "equivalentMM": 24,
+            "model": "Canon EOS 6D",
+            "make": "Canon",
+            "orientation": 1,
+            "warning": "Estimate only: confirm lens type, active sensor area, digital zoom, and any external crop."
+          }
+        },
+        {
+          "name": "Phone portrait rotation and FOV axes",
+          "passed": true,
+          "seconds": 0.282,
+          "result": [
+            64,
+            96
+          ]
+        },
+        {
+          "name": "Actual browser JPEG decode and float HDR gain reconstruction (Adobe XMP, ISO and Apple XMP)",
+          "passed": true,
+          "seconds": 0.72,
+          "result": {
+            "maxRelativeY": 4.216928958892822,
+            "kind": "gain-map HDR"
+          }
+        },
+        {
+          "name": "Phone patch anchor remains explicitly an anchor; legend uses active units",
+          "passed": true,
+          "seconds": 0.301,
+          "result": "patch"
+        },
+        {
+          "name": "Unsupported gain metadata fails closed; explicit SDR fallback is recorded",
+          "passed": true,
+          "seconds": 0.213,
+          "result": {
+            "kind": "explicit SDR base of HDR image",
+            "decodedHDR": false,
+            "detectedHDR": true,
+            "fallbackReason": "HDR metadata detected but no supported matching SDR-base gain image",
+            "scope": "Illustrative simulation of processed photograph; not scene photometry"
+          }
+        },
+        {
+          "name": "HEIF codec absence gives explicit install/permission route",
+          "passed": true,
+          "seconds": 0.085,
+          "result": "HEIC needs the optional local libheif codec. Install it with vendor/download_heif.py, or enable the pinned CDN codec. Your image is never uploaded."
+        },
+        {
+          "name": "Desktop screenshot and narrow layout without horizontal overflow",
+          "passed": true,
+          "seconds": 1.85,
+          "result": true
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "suite": "fullfield",
+      "count": 14,
+      "tests": [
+        {
+          "name": "Confirmed circular source selects whole-field mode and retains measured calibration and ROIs",
+          "passed": true,
+          "seconds": 4.781,
+          "result": {
+            "kind": "patch",
+            "scale": 254.3756484221955,
+            "luminance": 123.45,
+            "roi": {
+              "type": "rectangle",
+              "x": 115,
+              "y": 115,
+              "w": 25,
+              "h": 25
+            },
+            "referenceRaster": [
+              256,
+              256
+            ],
+            "referenceOrigin": {
+              "x": 0,
+              "y": 0
+            },
+            "patchUnscaled": {
+              "count": 625,
+              "excluded": 0,
+              "roi": {
+                "x": 115,
+                "y": 115,
+                "w": 25,
+                "h": 25
+              },
+              "region": {
+                "type": "rectangle",
+                "x": 115,
+                "y": 115,
+                "w": 25,
+                "h": 25
+              },
+              "field": null,
+              "weighting": "equal source-pixel means; solid-angle mean reported separately",
+              "sampling": "native source pixels at pixel centers; no preview colors or annotation pixels used",
+              "solidAngleSteradians": null,
+              "solidAngleWeightedMean": null,
+              "mean": 0.48530588822364806,
+              "minimum": 0.45986878871917725,
+              "maximum": 0.512071430683136,
+              "median": 0.4862048923969269,
+              "p05": 0.46205103397369385,
+              "p95": 0.5083340406417847,
+              "sd": 0.015663077194586008,
+              "negativeFraction": 0,
+              "quantiles": "linear interpolation of float32 samples"
+            },
+            "meterNote": "",
+            "evidence": "Single-anchor calibration, not independent validation"
+          }
+        },
+        {
+          "name": "800x800 full-field simulation, no angular-export prerequisite, source unchanged",
+          "passed": true,
+          "seconds": 22.449,
+          "result": {
+            "domain": "full circular fisheye",
+            "sourceProjection": "equidistant",
+            "outputProjection": "equidistant",
+            "diameterFov": 180,
+            "outputSize": 800,
+            "supersample": 2,
+            "conservativeNyquistCPD": 2.2222222222222223,
+            "sampling": "bilinear with subpixel area sampling; finite-resolution approximation",
+            "peakSensitivity": 19,
+            "cutoff": 1.3978965509653791,
+            "peakFrequency": 0.18281928332409494,
+            "bands": 6,
+            "boundary": "angular reflection at captured rim; reflected FFT padding inside each patch",
+            "workspace": [
+              256,
+              256
+            ],
+            "marginPixels": [
+              32,
+              32
+            ],
+            "localFloor": 0.01,
+            "localFloorRule": "0.01 cd/m2",
+            "angularSampling": "local tangent-plane center scale, not global fisheye pixels/degree",
+            "model": "DeVAS-derived luminance-only adaptation",
+            "smoothing": true,
+            "method": "overlapping local tangent-patch approximation",
+            "patches": 171,
+            "tileSize": 192,
+            "tileHFOV": 32,
+            "centerPixelsPerDegree": 5.843218984956551,
+            "filterEquivalentHFOV": 32.85860079766079,
+            "retainedPatchRadius": 12,
+            "maxLocalScaleVariationPercent": 4.518029190898165,
+            "blend": "normalized compact angular weights (1-(theta/12deg)^2)^2",
+            "minimumBlendWeight": 0.9572666855409895,
+            "reflectedSupportSamples": 712620,
+            "scope": "Uniform acuity/CSF applied locally over the captured field; no eccentricity-dependent retinal model. Patch blending and finite support are adaptations, not a validated spherical DeVAS model.",
+            "colorMode": "CIE xy chromaticity with normalized CSF lowpass; reconstructed with filtered Y",
+            "gamut": "negative linear-sRGB channels clipped, then normalized to filtered Y; display gamut clipping may alter visible color",
+            "geometry": {
+              "projection": "equidistant",
+              "hfov": 180,
+              "vfov": 180,
+              "shift": 0,
+              "lift": 0,
+              "vp": [
+                0,
+                0,
+                0
+              ],
+              "vd": [
+                0,
+                1,
+                0
+              ],
+              "vu": [
+                0,
+                0,
+                1
+              ],
+              "fore": 0,
+              "aft": 0,
+              "confirmed": true
+            },
+            "sourceGeometry": {
+              "projection": "equidistant",
+              "hfov": 180,
+              "vfov": 180,
+              "shift": 0,
+              "lift": 0,
+              "vp": [
+                0,
+                0,
+                0
+              ],
+              "vd": [
+                0,
+                1,
+                0
+              ],
+              "vu": [
+                0,
+                0,
+                1
+              ],
+              "fore": 0,
+              "aft": 0,
+              "confirmed": true
+            },
+            "calibration": {
+              "kind": "patch",
+              "scale": 254.3756484221955,
+              "luminance": 123.45,
+              "roi": {
+                "type": "rectangle",
+                "x": 115,
+                "y": 115,
+                "w": 25,
+                "h": 25
+              },
+              "referenceRaster": [
+                256,
+                256
+              ],
+              "referenceOrigin": {
+                "x": 0,
+                "y": 0
+              },
+              "patchUnscaled": {
+                "count": 625,
+                "excluded": 0,
+                "roi": {
+                  "x": 115,
+                  "y": 115,
+                  "w": 25,
+                  "h": 25
+                },
+                "region": {
+                  "type": "rectangle",
+                  "x": 115,
+                  "y": 115,
+                  "w": 25,
+                  "h": 25
+                },
+                "field": null,
+                "weighting": "equal source-pixel means; solid-angle mean reported separately",
+                "sampling": "native source pixels at pixel centers; no preview colors or annotation pixels used",
+                "solidAngleSteradians": null,
+                "solidAngleWeightedMean": null,
+                "mean": 0.48530588822364806,
+                "minimum": 0.45986878871917725,
+                "maximum": 0.512071430683136,
+                "median": 0.4862048923969269,
+                "p05": 0.46205103397369385,
+                "p95": 0.5083340406417847,
+                "sd": 0.015663077194586008,
+                "negativeFraction": 0,
+                "quantiles": "linear interpolation of float32 samples"
+              },
+              "meterNote": "",
+              "evidence": "Single-anchor calibration, not independent validation"
+            },
+            "logmar": 1,
+            "pr": 1,
+            "units": "cd/m2",
+            "sourceSampling": "native raster"
+          }
+        },
+        {
+          "name": "Numeric full-field export includes explicit circular support mask",
+          "passed": true,
+          "seconds": 2.127,
+          "result": {
+            "pfmBytes": 2560016,
+            "maskBytes": 640015
+          }
+        },
+        {
+          "name": "Reset visibility clears result, not crop geometry scale or saved measurements",
+          "passed": true,
+          "seconds": 2.079,
+          "result": true
+        },
+        {
+          "name": "Unaltered full-field color is identical before and after",
+          "passed": true,
+          "seconds": 3.117,
+          "result": true
+        },
+        {
+          "name": "40-degree band spans full fisheye width, exports binary mask, preserves source",
+          "passed": true,
+          "seconds": 4.381,
+          "result": {
+            "type": "band",
+            "bandHeight": 40,
+            "coneDiameter": 60,
+            "upper": 50,
+            "lower": 70,
+            "yaw": 0,
+            "pitch": 0,
+            "roll": 0,
+            "style": "binary",
+            "opacity": 0.75,
+            "color": "#e47070",
+            "size": 800,
+            "count": 163264,
+            "solidAngleSteradians": 2.1489984948431484,
+            "solidAngleWeightedMean": 123.30338575955999,
+            "pixelMean": 123.31138079303598,
+            "bandConvention": "Full vertical elevation height: 40 degrees means -20 to +20 degrees; spans captured horizontal field.",
+            "guthReference": null,
+            "sourceUnchanged": true,
+            "units": "cd/m2",
+            "geometry": {
+              "projection": "equidistant",
+              "hfov": 180,
+              "vfov": 180,
+              "shift": 0,
+              "lift": 0,
+              "vp": [
+                0,
+                0,
+                0
+              ],
+              "vd": [
+                0,
+                1,
+                0
+              ],
+              "vu": [
+                0,
+                0,
+                1
+              ],
+              "fore": 0,
+              "aft": 0,
+              "confirmed": true
+            },
+            "sourceGeometry": {
+              "projection": "equidistant",
+              "hfov": 180,
+              "vfov": 180,
+              "shift": 0,
+              "lift": 0,
+              "vp": [
+                0,
+                0,
+                0
+              ],
+              "vd": [
+                0,
+                1,
+                0
+              ],
+              "vu": [
+                0,
+                0,
+                1
+              ],
+              "fore": 0,
+              "aft": 0,
+              "confirmed": true
+            },
+            "sampling": {
+              "domain": "full circular fisheye",
+              "sourceProjection": "equidistant",
+              "outputProjection": "equidistant",
+              "diameterFov": 180,
+              "outputSize": 800,
+              "supersample": 2,
+              "conservativeNyquistCPD": 2.2222222222222223,
+              "sampling": "bilinear with subpixel area sampling; finite-resolution approximation"
+            },
+            "calibration": {
+              "kind": "patch",
+              "scale": 254.3756484221955,
+              "luminance": 123.45,
+              "roi": {
+                "type": "rectangle",
+                "x": 115,
+                "y": 115,
+                "w": 25,
+                "h": 25
+              },
+              "referenceRaster": [
+                256,
+                256
+              ],
+              "referenceOrigin": {
+                "x": 0,
+                "y": 0
+              },
+              "patchUnscaled": {
+                "count": 625,
+                "excluded": 0,
+                "roi": {
+                  "x": 115,
+                  "y": 115,
+                  "w": 25,
+                  "h": 25
+                },
+                "region": {
+                  "type": "rectangle",
+                  "x": 115,
+                  "y": 115,
+                  "w": 25,
+                  "h": 25
+                },
+                "field": null,
+                "weighting": "equal source-pixel means; solid-angle mean reported separately",
+                "sampling": "native source pixels at pixel centers; no preview colors or annotation pixels used",
+                "solidAngleSteradians": null,
+                "solidAngleWeightedMean": null,
+                "mean": 0.48530588822364806,
+                "minimum": 0.45986878871917725,
+                "maximum": 0.512071430683136,
+                "median": 0.4862048923969269,
+                "p05": 0.46205103397369385,
+                "p95": 0.5083340406417847,
+                "sd": 0.015663077194586008,
+                "negativeFraction": 0,
+                "quantiles": "linear interpolation of float32 samples"
+              },
+              "meterNote": "",
+              "evidence": "Single-anchor calibration, not independent validation"
+            }
+          }
+        },
+        {
+          "name": "Guth total, binocular subset, cone and custom upper-lower fields",
+          "passed": true,
+          "seconds": 19.927,
+          "result": {
+            "guth-total": 383778,
+            "guth-both": 219448,
+            "cone": 55848,
+            "custom": 420410
+          }
+        },
+        {
+          "name": "Viewing overlay can use luminance falsecolor and export its legend",
+          "passed": true,
+          "seconds": 8.337,
+          "result": true
+        },
+        {
+          "name": "Rotating and resetting field overlay does not alter calibrated image or simulations",
+          "passed": true,
+          "seconds": 5.196,
+          "result": true
+        },
+        {
+          "name": "Angular educational effect, invalid fixation guard, and isolated educational reset",
+          "passed": true,
+          "seconds": 7.55,
+          "result": true
+        },
+        {
+          "name": "Reduced-detail plus local angular Gaussian can run over full circular color image",
+          "passed": true,
+          "seconds": 8.23,
+          "result": true
+        },
+        {
+          "name": "Local perspective mode remains available; Reset both restores defaults without source changes",
+          "passed": true,
+          "seconds": 4.199,
+          "result": true
+        },
+        {
+          "name": "Provided Photosphere room: full 180-degree equisolid test, masks and resets preserve file calibration",
+          "passed": true,
+          "seconds": 45.812,
+          "result": {
+            "sourceDimensions": [
+              3576,
+              3576
+            ],
+            "fileScale": {
+              "kind": "declared",
+              "scale": 179,
+              "source": "file-import",
+              "verified": false,
+              "evidence": "Supported file luminance convention applied at import. Absolute calibration has not been independently verified."
+            },
+            "sampling": 1.745329251994329,
+            "note": "Equisolid test geometry is an explicit assumption, not lens calibration."
+          }
+        },
+        {
+          "name": "Narrow layout has no horizontal overflow",
+          "passed": true,
+          "seconds": 0.226,
+          "result": true
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "suite": "precision",
+      "count": 18,
+      "tests": [
+        {
+          "test": "Load calibrated circular fixture; crop circle guide hidden by default",
+          "passed": true,
+          "seconds": 0.4672214984893799,
+          "result": {
+            "count": 205892,
+            "excluded": 56252,
+            "mean": 28.554357609992596,
+            "minimum": 20.011109083890915,
+            "maximum": 99.84100317955017,
+            "median": 25.245364665985107,
+            "p05": 20.93523123115301,
+            "p95": 29.863832220435143,
+            "sd": 16.11813930461621,
+            "negativeFraction": 0,
+            "zeroFraction": 0,
+            "roi": {
+              "x": 0,
+              "y": 0,
+              "w": 512,
+              "h": 512
+            },
+            "weighting": "equal image pixels, not equal solid angles",
+            "quantiles": "linear interpolation on float32 samples"
+          }
+        },
+        {
+          "test": "Draw and save polygon target on primary source canvas",
+          "passed": true,
+          "seconds": 0.41592836380004883,
+          "result": 99.59547648291083
+        },
+        {
+          "test": "Automatic contained-target subtraction and A/background ratio",
+          "passed": true,
+          "seconds": 0.6400723457336426,
+          "result": {
+            "A": 7404,
+            "B_without_A": 30232,
+            "ratio": 3.2255304238286406
+          }
+        },
+        {
+          "test": "Partial overlap remains explicit B region, no automatic subtraction",
+          "passed": true,
+          "seconds": 0.2783987522125244,
+          "result": true
+        },
+        {
+          "test": "Show/hide guide and clear selection do not change measured image",
+          "passed": true,
+          "seconds": 0.2219710350036621,
+          "result": true
+        },
+        {
+          "test": "Snellen and logMAR synchronize bidirectionally without coarse snapping",
+          "passed": true,
+          "seconds": 0.07731485366821289,
+          "result": "logMAR 1 = Snellen 20/200. Contrast sensitivity is independent; source sampling limits still apply."
+        },
+        {
+          "test": "Guth field rendered on primary canvas and native region luminance measured",
+          "passed": true,
+          "seconds": 1.88822340965271,
+          "result": "Entire viewing field (native source): 101,180 valid pixels; pixel mean 32.233 cd/m\u00b2; solid-angle-weighted mean 32.233 cd/m\u00b2; approximately 3.0878 sr. Shaded-out pixels are excluded, not counted as black."
+        },
+        {
+          "test": "Region selection intersects viewing field using source pixels",
+          "passed": true,
+          "seconds": 0.40587949752807617,
+          "result": 31404
+        },
+        {
+          "test": "Colored transparent 10-degree rings export without changing numeric pixels",
+          "passed": true,
+          "seconds": 0.6399664878845215,
+          "result": {
+            "enabled": true,
+            "step": 10,
+            "maxAngle": 80,
+            "convention": "radius",
+            "center": "optical",
+            "color": "#d9eced",
+            "opacity": 0.65,
+            "lineWidth": 1.25,
+            "labels": true
+          }
+        },
+        {
+          "test": "Cone diameter labels selected independently from radius convention",
+          "passed": true,
+          "seconds": 0.20869016647338867,
+          "result": true
+        },
+        {
+          "test": "Whole-field chromaticity-filtered color output retains color",
+          "passed": true,
+          "seconds": 6.253133535385132,
+          "result": 205677
+        },
+        {
+          "test": "Color/grayscale choice leaves filtered luminance PFM byte-identical",
+          "passed": true,
+          "seconds": 3.731003522872925,
+          "result": true
+        },
+        {
+          "test": "Projection-aware Guth-shaped peripheral loss and percentage controls",
+          "passed": true,
+          "seconds": 0.9691891670227051,
+          "result": "Projection-aware unit rays; peripheral Guth angular-envelope contraction or circular comparison; irregular directional central scotoma. Percent controls are shape/opacity settings, not clinical stage. Stationary, not gaze tracked."
+        },
+        {
+          "test": "Irregular AMD-like central loss with eccentric offset and directional growth",
+          "passed": true,
+          "seconds": 1.0304388999938965,
+          "result": true
+        },
+        {
+          "test": "Simulation resets retain calibration, geometry, source samples and saved regions",
+          "passed": true,
+          "seconds": 0.22244811058044434,
+          "result": true
+        },
+        {
+          "test": "Revised simulation labels and no uncaught JavaScript errors",
+          "passed": true,
+          "seconds": 0.0025911331176757812,
+          "result": true
+        },
+        {
+          "test": "Mobile controls stay within viewport width",
+          "passed": true,
+          "seconds": 0.1410233974456787,
+          "result": true
+        },
+        {
+          "test": "Provided Photosphere HDR: crop, calibrated polygons, Guth field and 10-degree rings",
+          "passed": true,
+          "seconds": 17.184667825698853,
+          "result": {
+            "raster": [
+              3648,
+              3648
+            ],
+            "scale": 179,
+            "target": 8.377833462062398,
+            "surround": 8.250680636562505
+          }
+        }
+      ],
+      "pageErrors": []
+    }
+  ],
+  "environment": "Linux Chromium, production bundles embedded in an in-memory page. Only resource resolution and worker URL replaced. No live-host, Firefox, Safari, Windows UI or physical mobile testing.",
+  "sampleGeometry": "Photosphere room sample used explicit equisolid 180-degree test geometry; not an independent lens-calibration result.",
+  "sourcePreservation": "Native PFM before/after annotations is byte-identical. Filtered-luminance PFM color/mono is byte-identical. Calibration/crop/geometry/saved-region invariants asserted across resets.",
+  "modelScope": "Fullfield local-tangent adaptation; chromaticity/gamut adaptation and configurable reference-field masks. No patient-specific visual field validation."
+}
