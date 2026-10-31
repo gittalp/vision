@@ -1,0 +1,67 @@
+[
+  {
+    "module": "js/math.js",
+    "unchanged_from_v03": true,
+    "sha256": "1e0e7ca5e3f47e52461212e39fbeb39c942da7b09d48b09a77dbc47624611a8e"
+  },
+  {
+    "module": "js/geometry.js",
+    "unchanged_from_v03": true,
+    "sha256": "add681726354824031a7589e06a2fc8d71df77ca4fa18a941760d89a38daf221"
+  },
+  {
+    "module": "js/bracket.js",
+    "unchanged_from_v03": true,
+    "sha256": "ea477d5c7f8464081c1156b2dcbdbc2bb3d6a4c2348f728d0113475cf82104c2"
+  },
+  {
+    "module": "js/resources.js",
+    "unchanged_from_v03": true,
+    "sha256": "c637ef29fe1dc534546cd300830569ec77ff32566b31a78a6743bfe4da007651"
+  },
+  {
+    "module": "js/exr.js",
+    "unchanged_from_v03": true,
+    "sha256": "4ba6ab5c4390e3ebd90f0d16bc68fea711d1c170b7339721bbe0be6bd9a08be6"
+  },
+  {
+    "module": "js/fov.js",
+    "unchanged_from_v03": true,
+    "sha256": "2b74e03c0a5866cc02d9f701051104a3e4aa5ba6564a411e39d522502444ec49"
+  },
+  {
+    "module": "js/conditions.js",
+    "unchanged_from_v03": true,
+    "sha256": "b8fb31e05a2f780c6afea443beb2dde350ff436f66e1252600147decc1eabefb"
+  },
+  {
+    "module": "js/colorview.js",
+    "unchanged_from_v03": true,
+    "sha256": "03ef1345b5d2d1b9c8dbb7c9d36c446335f840c9d6db09313cd92ee50678a832"
+  },
+  {
+    "module": "js/phone.js",
+    "unchanged_from_v03": true,
+    "sha256": "81e40abcccde60a99c005b030c05eeab312b6d4d54db9ee712b178218620b42b"
+  },
+  {
+    "module": "js/heif.js",
+    "unchanged_from_v03": true,
+    "sha256": "ce688911c7d7b8a07c4ed3e40ebed7299b93695d218c1b20da73741410e15ffe"
+  },
+  {
+    "module": "js/falsecolor.js",
+    "unchanged_from_v03": true,
+    "sha256": "d27668ed6d9a321f910644cd95b8ca868c9140a8c5b8b91dd790a95497001140"
+  },
+  {
+    "module": "js/reproject.js",
+    "unchanged_from_v03": true,
+    "sha256": "0a788c32fcd3d758648c6d6f18f6ed645b2f37c50b68fc0e747186f16a5bd082"
+  },
+  {
+    "module": "js/cvd.js",
+    "unchanged_from_v03": true,
+    "sha256": "2fbed9ca8ffd4cc708b065d717759a20270649665bda6a1a1747831bbe82742e"
+  }
+]

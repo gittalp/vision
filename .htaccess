@@ -1,0 +1,5 @@
+# Optional Apache MIME hints; no server-side processing and no isolation headers.
+<IfModule mod_mime.c>
+AddType application/javascript .js .mjs
+AddType application/json .json
+</IfModule>
