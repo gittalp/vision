@@ -1,0 +1,102 @@
+[
+  {
+    "module": "js/app.js",
+    "status": "modified",
+    "sha256": "a67e1e6442c182a44a3e748e4cc20582b1af4c8d2dd395ca1b898c7df29cd6e2"
+  },
+  {
+    "module": "js/bracket.js",
+    "status": "unchanged",
+    "sha256": "ea477d5c7f8464081c1156b2dcbdbc2bb3d6a4c2348f728d0113475cf82104c2"
+  },
+  {
+    "module": "js/colorview.js",
+    "status": "unchanged",
+    "sha256": "03ef1345b5d2d1b9c8dbb7c9d36c446335f840c9d6db09313cd92ee50678a832"
+  },
+  {
+    "module": "js/conditions.js",
+    "status": "modified",
+    "sha256": "d889403c051292a1f37bc745b2d4be97ae0f6ea02dfd34c767a95b819b8a0748"
+  },
+  {
+    "module": "js/cropui.js",
+    "status": "unchanged",
+    "sha256": "c6e51b138d7e64c087b7b9384aaecb9c109d7d9e1a2bb69a28bbf33276708e98"
+  },
+  {
+    "module": "js/cvd.js",
+    "status": "unchanged",
+    "sha256": "2fbed9ca8ffd4cc708b065d717759a20270649665bda6a1a1747831bbe82742e"
+  },
+  {
+    "module": "js/exr.js",
+    "status": "unchanged",
+    "sha256": "4ba6ab5c4390e3ebd90f0d16bc68fea711d1c170b7339721bbe0be6bd9a08be6"
+  },
+  {
+    "module": "js/falsecolor.js",
+    "status": "unchanged",
+    "sha256": "d27668ed6d9a321f910644cd95b8ca868c9140a8c5b8b91dd790a95497001140"
+  },
+  {
+    "module": "js/fieldmask.js",
+    "status": "new",
+    "sha256": "1836f7845466f69b379dacf7115a730f8b120fc312cc15f0d8c0707e29b957d1"
+  },
+  {
+    "module": "js/fov.js",
+    "status": "unchanged",
+    "sha256": "2b74e03c0a5866cc02d9f701051104a3e4aa5ba6564a411e39d522502444ec49"
+  },
+  {
+    "module": "js/geometry.js",
+    "status": "unchanged",
+    "sha256": "add681726354824031a7589e06a2fc8d71df77ca4fa18a941760d89a38daf221"
+  },
+  {
+    "module": "js/guthdata.js",
+    "status": "new",
+    "sha256": "66575d690067087bbc528337b00e8174936dfb7d903eb026e3273cb929006e41"
+  },
+  {
+    "module": "js/heif.js",
+    "status": "unchanged",
+    "sha256": "ce688911c7d7b8a07c4ed3e40ebed7299b93695d218c1b20da73741410e15ffe"
+  },
+  {
+    "module": "js/io.js",
+    "status": "unchanged",
+    "sha256": "aa2fc40cc3bba2631ac7f292008dfca45eae2d410634bebdbb9ce6c8bcc0096d"
+  },
+  {
+    "module": "js/math.js",
+    "status": "unchanged",
+    "sha256": "1e0e7ca5e3f47e52461212e39fbeb39c942da7b09d48b09a77dbc47624611a8e"
+  },
+  {
+    "module": "js/phone.js",
+    "status": "unchanged",
+    "sha256": "81e40abcccde60a99c005b030c05eeab312b6d4d54db9ee712b178218620b42b"
+  },
+  {
+    "module": "js/reproject.js",
+    "status": "unchanged",
+    "sha256": "0a788c32fcd3d758648c6d6f18f6ed645b2f37c50b68fc0e747186f16a5bd082"
+  },
+  {
+    "module": "js/resources.js",
+    "status": "unchanged",
+    "sha256": "c637ef29fe1dc534546cd300830569ec77ff32566b31a78a6743bfe4da007651"
+  },
+  {
+    "module": "js/spherical.js",
+    "status": "new",
+    "sha256": "471ce8d266734d0ad08a1b093ac81c2153571569466c6e24fe50a9acfb64f325"
+  },
+  {
+    "module": "js/worker.js",
+    "status": "modified",
+    "sha256": "214a771c3b53508861e4a183d5bc4a5a45394353a64153acd4dd264eb2a7a2ca"
+  }
+]
