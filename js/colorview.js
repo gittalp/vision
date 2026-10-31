@@ -1,9 +1,0 @@
-import {validateGeometry,rayToPixel} from './geometry.js';
-import {inCircle} from './math.js';
-export function colorViewport(frame,g,{width=512,height=384,hfov=45,yaw=0,pitch=0,supersample=2}={}){
- const geometry=validateGeometry(g);if(![width,height].every(Number.isInteger)||width<8||height<8||width*height>512*512||![hfov,yaw,pitch].every(Number.isFinite)||hfov>60||hfov<5||Math.abs(pitch)>90||Math.abs(yaw)>180||![1,2,3,4].includes(supersample))throw Error('Invalid educational viewport');
- const rgb=new Float32Array(width*height*3),f=width/(2*Math.tan(hfov*Math.PI/360)),cy=Math.cos(yaw*Math.PI/180),sy=Math.sin(yaw*Math.PI/180),cp=Math.cos(pitch*Math.PI/180),sp=Math.sin(pitch*Math.PI/180),w=frame.width,h=frame.height,m=frame.display;let invalid=0;
- for(let y=0;y<height;y++)for(let x=0;x<width;x++){const sum=[0,0,0];let ok=true;for(let yy=0;yy<supersample;yy++)for(let xx=0;xx<supersample;xx++){let u=(x+(xx+.5)/supersample-width/2)/f,v=(y+(yy+.5)/supersample-height/2)/f,z=1,vv=cp*v-sp*z,zz=sp*v+cp*z;v=vv;z=zz;const uu=cy*u+sy*z;z=-sy*u+cy*z;u=uu;const pixel=rayToPixel(geometry,w,h,u,v,z);if(!pixel||pixel[0]<0||pixel[1]<0||pixel[0]>w-1||pixel[1]>h-1){ok=false;continue;}const [sx,syy]=pixel,x0=Math.floor(sx),y0=Math.floor(syy),x1=Math.min(w-1,x0+1),y1=Math.min(h-1,y0+1),fx=sx-x0,fy=syy-y0,ids=[y0*w+x0,y0*w+x1,y1*w+x0,y1*w+x1],weights=[(1-fx)*(1-fy),fx*(1-fy),(1-fx)*fy,fx*fy];if(ids.some(i=>(frame.valid&&!frame.valid[i])||!inCircle(i%w,Math.floor(i/w),w,h,g.mask))){ok=false;continue;}const color=[0,1,2].map(c=>ids.reduce((a,i,k)=>a+weights[k]*frame.rgb[3*i+c],0));for(let c=0;c<3;c++)sum[c]+=m[c*3]*color[0]+m[c*3+1]*color[1]+m[c*3+2]*color[2];}if(!ok)invalid++;for(let c=0;c<3;c++)rgb[(y*width+x)*3+c]=Math.max(0,sum[c]/supersample**2);}
- if(invalid)throw Error('Educational viewport includes '+invalid+' unsupported pixels. Reduce FOV or change its direction.');
- return {rgb,width,height};
-}
