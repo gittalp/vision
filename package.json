@@ -1,0 +1,9 @@
+{
+  "type": "module",
+  "private": true,
+  "name": "visionsim-hdr-workspace",
+  "version": "0.3.0",
+  "scripts": {
+    "test": "node tests/math.test.mjs && node tests/codecs.test.mjs && node tests/preparation.test.mjs && node tests/features-v03.test.mjs"
+  }
+}
