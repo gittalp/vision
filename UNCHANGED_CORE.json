@@ -1,0 +1,124 @@
+{
+  "baseline": "VisionSim_HDR_Web_0_8_Glare_Preparation.zip",
+  "unchangedModules": [
+    {
+      "path": "js/angles.js",
+      "sha256": "fb054aa2d74ec6df13ec82340bc8ed6ea700fca035086dff7615e1db60ed67c4"
+    },
+    {
+      "path": "js/bracket.js",
+      "sha256": "ea477d5c7f8464081c1156b2dcbdbc2bb3d6a4c2348f728d0113475cf82104c2"
+    },
+    {
+      "path": "js/chroma.js",
+      "sha256": "6e6510402fe625c919ffd94ef316fa648e9e9a1a07395590b88c114d1745f1b4"
+    },
+    {
+      "path": "js/colorview.js",
+      "sha256": "826de105ae9e83f9f64a16983432b823a85584b67458310265a971cae4495fe5"
+    },
+    {
+      "path": "js/conditions.js",
+      "sha256": "9fe9e4ef0d8d9348bc1260b3bd0e11a3872f8f6e5f9fbca90f1bc148d13d6127"
+    },
+    {
+      "path": "js/cropui.js",
+      "sha256": "c6e51b138d7e64c087b7b9384aaecb9c109d7d9e1a2bb69a28bbf33276708e98"
+    },
+    {
+      "path": "js/cvd.js",
+      "sha256": "2fbed9ca8ffd4cc708b065d717759a20270649665bda6a1a1747831bbe82742e"
+    },
+    {
+      "path": "js/exr.js",
+      "sha256": "4ba6ab5c4390e3ebd90f0d16bc68fea711d1c170b7339721bbe0be6bd9a08be6"
+    },
+    {
+      "path": "js/falsecolor.js",
+      "sha256": "d27668ed6d9a321f910644cd95b8ca868c9140a8c5b8b91dd790a95497001140"
+    },
+    {
+      "path": "js/fieldloss.js",
+      "sha256": "96cd94a3a9939e716fd7bebcb8dbd4427ef87811ae3e9163a8635aa167cf183f"
+    },
+    {
+      "path": "js/fieldmask.js",
+      "sha256": "4ef178641a0d425e008171da371fda1e71ceb391f59c4b0b77427a48a51d82ab"
+    },
+    {
+      "path": "js/fov.js",
+      "sha256": "2b74e03c0a5866cc02d9f701051104a3e4aa5ba6564a411e39d522502444ec49"
+    },
+    {
+      "path": "js/geometry.js",
+      "sha256": "add681726354824031a7589e06a2fc8d71df77ca4fa18a941760d89a38daf221"
+    },
+    {
+      "path": "js/glare.js",
+      "sha256": "7f5968e5c243a9a1326c6fe1e87685e77d2d1ff08421335913c66900bfaddafd"
+    },
+    {
+      "path": "js/guthdata.js",
+      "sha256": "66575d690067087bbc528337b00e8174936dfb7d903eb026e3273cb929006e41"
+    },
+    {
+      "path": "js/heif.js",
+      "sha256": "ce688911c7d7b8a07c4ed3e40ebed7299b93695d218c1b20da73741410e15ffe"
+    },
+    {
+      "path": "js/io.js",
+      "sha256": "d34661ee8438ff5ff8f2ec776f71cb067301af5def1d7e7c712650d513fe2702"
+    },
+    {
+      "path": "js/math.js",
+      "sha256": "1e0e7ca5e3f47e52461212e39fbeb39c942da7b09d48b09a77dbc47624611a8e"
+    },
+    {
+      "path": "js/nativeassets.js",
+      "sha256": "071a3672fe7f7a12ed3906ea30395e74f86d0a1831f36684a3d3091c619e0999"
+    },
+    {
+      "path": "js/phone.js",
+      "sha256": "81e40abcccde60a99c005b030c05eeab312b6d4d54db9ee712b178218620b42b"
+    },
+    {
+      "path": "js/regionbook.js",
+      "sha256": "84402fa18b4f2e4d76a5f5ca49bf61f3566b9e31a8ca4a20966c032da6aff46e"
+    },
+    {
+      "path": "js/regionstats.js",
+      "sha256": "8680955f0d52d3660ec11fa134e6ad53eb998a7b757e9992aa1362eb7da5a21b"
+    },
+    {
+      "path": "js/reproject.js",
+      "sha256": "0a788c32fcd3d758648c6d6f18f6ed645b2f37c50b68fc0e747186f16a5bd082"
+    },
+    {
+      "path": "js/resources.js",
+      "sha256": "c637ef29fe1dc534546cd300830569ec77ff32566b31a78a6743bfe4da007651"
+    },
+    {
+      "path": "js/roiui.js",
+      "sha256": "95ea3c1f10b9d86dafea77adf1a5d7ddc5bcd74926967c6ea2c23803ecf3d297"
+    },
+    {
+      "path": "js/selections.js",
+      "sha256": "11d2b50b1125551b85bb16314353f333f1b7e7708fc3748760ccd252aa8ae518"
+    },
+    {
+      "path": "js/spherical.js",
+      "sha256": "0d10f025ed6b3352da187903e3a7dbdec6b4daa9728da481ed9feadb12e5a740"
+    },
+    {
+      "path": "js/zipstore.js",
+      "sha256": "6e492b0becc759a68d43f919ed2f5b12309215496a39e06046ea400ff1fbfc0c"
+    }
+  ],
+  "changedExistingModules": [
+    "js/app.js",
+    "js/glare-runner.js",
+    "js/glareui.js",
+    "js/worker.js"
+  ],
+  "note": "Changes connect the real browser engine and results. No changes to source luminance, projection, selection, CSF, field-loss, bracket or false-color calculations."
+}
