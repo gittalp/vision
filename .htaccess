@@ -1,6 +1,0 @@
-# Optional static-file MIME hints. No Python or server-side image processing.
-<IfModule mod_mime.c>
-AddType application/javascript .js .mjs
-AddType application/json .json
-AddType application/wasm .wasm
-</IfModule>
