@@ -1,0 +1,19 @@
+{
+  "width": 48,
+  "height": 32,
+  "parameters": {
+    "condition": "diabetic",
+    "hfov": 40,
+    "severity": 0.63,
+    "diameter": 8,
+    "contrast": 0.8,
+    "saturation": 0.7,
+    "seed": 2026,
+    "focusX": 0.5,
+    "focusY": 0.5
+  },
+  "before": "387902fe56e049fbdf8843cacba215bc5c2523dde24cc081f57da6f589835dd4",
+  "after": "08cfa387b9e152fabf74908b977cef26d3da6309b880c8d1b062b7f4b042d8c1",
+  "baselineVersion": "0.9.1",
+  "newLabel": "Diabetic retinopathy simulation"
+}

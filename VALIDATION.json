@@ -1,0 +1,25 @@
+{
+  "release": "0.9.2",
+  "baseline": "0.9.1",
+  "numericalGroupsAndFixtures": 190,
+  "browserMaintenanceStages": 17,
+  "browserWorkflowStages": 20,
+  "unchangedJavaScriptFiles": 31,
+  "actualEvalglareWASM": true,
+  "originalEngineAssetsUnchanged": true,
+  "circadianEstimatorImplemented": false,
+  "liveHostTested": false,
+  "firefoxTested": false,
+  "safariTested": false,
+  "windowsExeTested": false,
+  "correctionFixture": {
+    "DGP_on": 0.182501,
+    "DGP_off": 0.26558,
+    "Ev_lux_both": 199.457081,
+    "preparedHDRByteIdentical": true
+  },
+  "countsNote": "Includes individual numerical groups and 10 codec fixtures, not 190 independent empirical validations.",
+  "extractedNumericalGroupsAndFixturesPassed": 190,
+  "packagedBrowserStagesPassed": 6,
+  "manifestFileCount": 150
+}

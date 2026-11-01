@@ -1,0 +1,27 @@
+{
+  "installed": true,
+  "engine": "evalglare",
+  "format": "esm-default",
+  "factory": "default",
+  "loader": "evalglare.js",
+  "wasm": "evalglare.wasm",
+  "version": "3.06",
+  "versionBanner": "evalglare 3.06 release 01.10.2025 by J.Wienold, EPFL",
+  "sha256": {
+    "loader": "aba94254acc0ea3f3ce0bc77b612ce0f4987fa2f823ebfc103e9ece0f1274c7e",
+    "wasm": "8a93e1c2c97192d31466992e19b11594175111f781e729ba01af20f6a1aafe3b"
+  },
+  "provenance": {
+    "origin": "User-supplied evalglare.js and evalglare.wasm",
+    "filesUnmodified": true,
+    "sourceCommit": null,
+    "compilerVersion": null,
+    "note": "Exact source commit and compiler configuration were not supplied; do not infer them from the runtime version."
+  },
+  "source": "https://github.com/LBNL-ETA/Radiance",
+  "notices": [
+    "../../licenses/EVALGLARE-NOTICE.txt",
+    "../../licenses/RADIANCE-LICENSE.txt",
+    "../../licenses/EMSCRIPTEN-NOTICE.txt"
+  ]
+}
