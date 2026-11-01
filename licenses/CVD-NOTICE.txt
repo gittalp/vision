@@ -1,7 +1,0 @@
-Machado, Oliveira and Fernandes (2009), A Physiologically-based Model for
-Simulation of Color Vision Deficiency, IEEE TVCG 15(6), 1291-1298.
-DOI: 10.1109/TVCG.2009.113
-Tables retained from the project author's supplied educational website.
-Primary author resource: https://www.inf.ufrgs.br/~oliveira/pubs_files/CVD_Simulation/CVD_Simulation.html
-This implementation applies/interpolates the tables in linear RGB. These
-previews do not establish an individual observer's experience or diagnosis.
